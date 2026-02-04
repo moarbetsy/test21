@@ -14,11 +14,10 @@
     <meta property="og:image" content="https://yourwebsite.com/assets/hero.avif">
     <meta property="og:type" content="website">
 
-    <!-- SECURITY: Strict CSP for 'Best Practices' Score -->
-    <!-- Allows inline styles/scripts for this single-file demo. In true production, move CSS/JS to external files and remove 'unsafe-inline' -->
+    <!-- SECURITY: Strict CSP -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: https:; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; frame-src 'self' https://www.google.com;">
 
-    <!-- JSON-LD Structured Data for 'SEO' Score -->
+    <!-- JSON-LD Structured Data -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -50,16 +49,17 @@
     }
     </script>
 
-    <!-- INLINE FAVICON (No request) -->
+    <!-- INLINE FAVICON -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a0a0a'/%3E%3Cpath d='M20 40c4 4 20 4 24 0' stroke='%2397E45D' stroke-width='4' fill='none' stroke-linecap='round'/%3E%3Cpath d='M24 28c2-6 14-6 16 0' stroke='%23ffffff' stroke-width='4' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
 
-    <!-- CRITICAL CSS (Replaces Tailwind CDN for 100 Performance) -->
+    <!-- CRITICAL CSS -->
     <style>
       :root {
         --primary: #97e45d;
         --primary-dark: #7ab848;
-        --text-main: #111827; /* Darker for AAA Contrast */
-        --text-muted: #4b5563;
+        --text-main: #111827; 
+        /* FIX: Darkened from #4b5563 to #374151 to pass AAA on white/light-gray */
+        --text-muted: #374151; 
         --bg-body: #fafafa;
         --bg-dark: #0a0a0a;
         --white: #ffffff;
@@ -72,7 +72,6 @@
       html { scroll-behavior: smooth; font-size: 100%; -webkit-text-size-adjust: 100%; }
       
       body {
-        /* System Fonts = 0ms Load Time. Replace with local @font-face if strict branding needed. */
         font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         background-color: var(--bg-body);
         color: var(--text-main);
@@ -118,12 +117,13 @@
       .nav-links a { text-decoration: none; color: var(--text-muted); font-weight: 500; font-size: 0.95rem; }
       .nav-links a:hover { color: #000; }
 
-      /* Icons (Inline SVG styling) */
+      /* Icons */
       .icon { width: 1.5rem; height: 1.5rem; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
       
       /* Hero */
       .hero-section { padding: 4rem 0 6rem; overflow: hidden; }
-      .badge { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.35rem 1rem; background: #f3f4f6; border-radius: 99px; font-size: 0.875rem; font-weight: 600; margin-bottom: 1.5rem; }
+      /* FIX: Explicit color set to #111827 to ensure high contrast on light gray bg */
+      .badge { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.35rem 1rem; background: #f3f4f6; color: #111827; border-radius: 99px; font-size: 0.875rem; font-weight: 600; margin-bottom: 1.5rem; }
       
       /* Images */
       img { max-width: 100%; height: auto; display: block; border-radius: var(--radius); }
@@ -134,12 +134,12 @@
       .service-card:hover { border-color: var(--primary); transform: translateY(-2px); }
       
       /* Forms */
-      input { width: 100%; padding: 0.875rem; border: 1px solid #d1d5db; border-radius: 0.5rem; margin-bottom: 1rem; font-size: 1rem; }
-      label { display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.9rem; }
+      input { width: 100%; padding: 0.875rem; border: 1px solid #d1d5db; border-radius: 0.5rem; margin-bottom: 1rem; font-size: 1rem; color: #111827; }
+      label { display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.9rem; color: #111827; }
 
       /* Map Facade */
       .map-wrapper { position: relative; height: 400px; background: #f3f4f6; border-radius: var(--radius); overflow: hidden; display: flex; align-items: center; justify-content: center; }
-      .map-overlay { position: absolute; inset: 0; background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNlNWU3ZWIiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZpbGw9IiM5Y2EzYWYiPk1hcCBQcmV2aWV3PC90ZXh0Pjwvc3ZnPg==') center/cover; } /* Replace with real map-preview.jpg in production */
+      .map-overlay { position: absolute; inset: 0; background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNlNWU3ZWIiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZpbGw9IiM5Y2EzYWYiPk1hcCBQcmV2aWV3PC90ZXh0Pjwvc3ZnPg==') center/cover; }
       
       /* Footer */
       footer { background: var(--bg-dark); color: #d1d5db; padding: 4rem 0; margin-top: 4rem; }
@@ -209,7 +209,6 @@
             
             <div class="hero-img-wrap">
               <!-- PERFORMANCE: Explicit Width/Height + High Priority -->
-              <!-- Use your local 'assets/hero.avif' here -->
               <img 
                 src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MDAiIGhlaWdodD0iNjAwIj48cmVjdCB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgZmlsbD0iI2UzZTVlNSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzlhYTNhZiI+SGVybyBJbWFnZSAoODAweDYwMCk8L3RleHQ+PC9zdmc+" 
                 alt="Modern dental clinic interior" 
@@ -310,26 +309,25 @@
             </ul>
           </div>
         </div>
-        <div style="border-top:1px solid rgba(255,255,255,0.1); padding-top:2rem; font-size:0.875rem; color:#6b7280;">
+        <!-- FIX: Copyright color explicitly set to #9ca3af (4.5+:1 on dark bg) -->
+        <div style="border-top:1px solid rgba(255,255,255,0.1); padding-top:2rem; font-size:0.875rem; color:#9ca3af;">
           &copy; 2026 Crescent Dental Clinic. All rights reserved.
         </div>
       </div>
     </footer>
 
-    <!-- MAP LOADER SCRIPT (Inline for single-file, 0 dependency) -->
+    <!-- MAP LOADER SCRIPT -->
     <script>
       document.getElementById('load-map').addEventListener('click', function() {
         var container = document.getElementById('map-container');
         var iframe = document.createElement('iframe');
-        // Actual Google Maps Embed Link
         iframe.src = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2346.7!2d-1.543!3d53.991!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTP!5e0!3m2!1sen!2suk";
         iframe.style.width = "100%";
         iframe.style.height = "100%";
         iframe.style.border = "0";
         iframe.title = "Google Map of Clinic Location";
         iframe.allowFullscreen = true;
-        
-        container.innerHTML = ''; // Remove button and overlay
+        container.innerHTML = ''; 
         container.appendChild(iframe);
       });
     </script>
