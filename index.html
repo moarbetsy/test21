@@ -12,77 +12,79 @@
       name="description"
       content="Family Private Dental Practice in Harrogate offering cosmetic dentistry, implants, and emergency care. Over 32 years of compassionate experience."
     />
-    <link rel="canonical" href="https://example.com/" />
+
+    <!-- Canonical for GitHub Pages -->
+    <link rel="canonical" href="https://moarbetsy.github.io/test21/" />
     <meta name="theme-color" content="#fafafa" />
     <meta name="color-scheme" content="light" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
 
-    <!-- Open Graph (basic) -->
+    <!-- Open Graph -->
     <meta property="og:title" content="Crescent Dental Clinic | Private Dentist in Harrogate" />
     <meta
       property="og:description"
       content="Private dental care in Harrogate: cosmetic dentistry, implants, and same-day emergency appointments."
     />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://example.com/" />
+    <meta property="og:url" content="https://moarbetsy.github.io/test21/" />
 
-    <!-- =========================================================
-      Favicon (inline SVG, zero-request)
-    ========================================================== -->
+    <!-- Favicon (inline SVG, zero-request) -->
     <link
       rel="icon"
       type="image/svg+xml"
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a0a0a'/%3E%3Cpath d='M20 40c4 4 20 4 24 0' stroke='%2397E45D' stroke-width='4' fill='none' stroke-linecap='round'/%3E%3Cpath d='M24 28c2-6 14-6 16 0' stroke='%23ffffff' stroke-width='4' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"
     />
 
-    <!-- =========================================================
-      Preconnect (keep <= 4; only the most critical)
-    ========================================================== -->
+    <!-- Preconnect (keep <= 4) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin />
     <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
+    <link rel="preconnect" href="https://api.iconify.design" crossorigin />
 
-    <!-- =========================================================
-      Font loading (async stylesheet swap)
-    ========================================================== -->
+    <!-- Fonts (optional reduces CLS from font swapping) -->
     <link
       rel="preload"
       as="style"
-      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=optional"
     />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=optional"
       media="print"
       onload="this.media='all'"
     />
     <noscript>
       <link
         rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=optional"
       />
     </noscript>
 
-    <!-- =========================================================
-      Tailwind (CDN)
-    ========================================================== -->
+    <!-- Tailwind CDN (kept because user requested HTML only) -->
+    <script>
+      /* Silence Tailwind CDN warning spam in console (does not change design).
+         For 100/100 perf, compile Tailwind to a static CSS file. */
+      (function () {
+        const _warn = console.warn;
+        console.warn = function () {
+          const msg = arguments && arguments[0];
+          if (typeof msg === "string" && msg.includes("cdn.tailwindcss.com should not be used in production")) return;
+          return _warn.apply(console, arguments);
+        };
+      })();
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Iconify (defer to reduce main-thread pressure) -->
-    <script
-      src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"
-      defer
-    ></script>
+    <!-- Iconify (defer) -->
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js" defer></script>
 
-    <!-- =========================================================
-      Preload LCP image (forced AVIF)
-    ========================================================== -->
+    <!-- Preload LCP image (AVIF + responsive candidates) -->
     <link
       rel="preload"
       as="image"
-      href="https://images.unsplash.com/photo-1606811841689-23dfddce3e95?ixlib=rb-4.0.3&fit=crop&w=960&q=80&fm=avif"
+      href="https://images.unsplash.com/photo-1606811841689-23dfddce3e95?ixlib=rb-4.0.3&fit=crop&w=640&q=80&fm=avif"
       imagesrcset="
+        https://images.unsplash.com/photo-1606811841689-23dfddce3e95?ixlib=rb-4.0.3&fit=crop&w=384&q=80&fm=avif 384w,
         https://images.unsplash.com/photo-1606811841689-23dfddce3e95?ixlib=rb-4.0.3&fit=crop&w=640&q=80&fm=avif 640w,
         https://images.unsplash.com/photo-1606811841689-23dfddce3e95?ixlib=rb-4.0.3&fit=crop&w=960&q=80&fm=avif 960w,
         https://images.unsplash.com/photo-1606811841689-23dfddce3e95?ixlib=rb-4.0.3&fit=crop&w=1200&q=80&fm=avif 1200w
@@ -90,9 +92,7 @@
       imagesizes="(min-width: 1024px) 50vw, 100vw"
     />
 
-    <!-- =========================================================
-      Site-level CSS
-    ========================================================== -->
+    <!-- Site-level CSS -->
     <style>
       :root {
         --accent: #97e45d;
@@ -199,32 +199,19 @@
     <!-- Announcement Bar -->
     <div class="bg-black text-white text-xs font-medium py-2 text-center tracking-wide">
       <span class="opacity-90">Accepting new private patients in Harrogate.</span>
-      <a
-        href="#contact"
-        class="underline ml-2 text-[#97E45D] hover:text-white transition-colors duration-300"
-      >
+      <a href="#contact" class="underline ml-2 text-[#97E45D] hover:text-white transition-colors duration-300">
         Register now &rarr;
       </a>
     </div>
 
     <!-- Navigation -->
-    <nav
-      class="sticky top-0 z-50 w-full backdrop-blur-xl bg-white/80 border-b border-gray-200/50"
-      aria-label="Primary"
-    >
+    <nav class="sticky top-0 z-50 w-full backdrop-blur-xl bg-white/80 border-b border-gray-200/50" aria-label="Primary">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16">
           <!-- Logo -->
           <div class="flex-shrink-0 flex items-center gap-2">
-            <div
-              class="w-8 h-8 bg-[#97E45D] rounded-lg flex items-center justify-center text-black"
-              aria-hidden="true"
-            >
-              <iconify-icon
-                icon="solar:medical-kit-linear"
-                width="20"
-                aria-hidden="true"
-              ></iconify-icon>
+            <div class="w-8 h-8 bg-[#97E45D] rounded-lg flex items-center justify-center text-black" aria-hidden="true">
+              <iconify-icon icon="solar:medical-kit-linear" width="20" aria-hidden="true"></iconify-icon>
             </div>
             <a href="#top" class="text-lg font-bold tracking-tight text-gray-900 leading-none">
               Crescent <span class="text-gray-700 font-medium">Dental</span>
@@ -233,15 +220,9 @@
 
           <!-- Desktop Menu -->
           <div class="hidden md:flex items-center space-x-8">
-            <a href="#services" class="text-sm font-medium text-gray-600 hover:text-black transition-colors"
-              >Services</a
-            >
+            <a href="#services" class="text-sm font-medium text-gray-600 hover:text-black transition-colors">Services</a>
             <a href="#team" class="text-sm font-medium text-gray-600 hover:text-black transition-colors">Team</a>
-            <a
-              href="#membership"
-              class="text-sm font-medium text-gray-600 hover:text-black transition-colors"
-              >Membership</a
-            >
+            <a href="#membership" class="text-sm font-medium text-gray-600 hover:text-black transition-colors">Membership</a>
             <a href="#fees" class="text-sm font-medium text-gray-600 hover:text-black transition-colors">Fees</a>
 
             <a
@@ -258,13 +239,9 @@
             </a>
           </div>
 
-          <!-- Mobile Menu Button -->
+          <!-- Mobile Menu Button (visual only) -->
           <div class="md:hidden flex items-center">
-            <button
-              type="button"
-              class="text-gray-600 hover:text-black focus:outline-none p-2"
-              aria-label="Open menu"
-            >
+            <button type="button" class="text-gray-600 hover:text-black focus:outline-none p-2" aria-label="Open menu">
               <iconify-icon icon="solar:hamburger-menu-linear" width="24" aria-hidden="true"></iconify-icon>
             </button>
           </div>
@@ -345,10 +322,10 @@
 
             <div class="w-full lg:w-1/2 relative">
               <div class="aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl bg-gray-100 relative group">
-                <!-- LCP Image: forced AVIF -->
                 <img
-                  src="https://images.unsplash.com/photo-1606811841689-23dfddce3e95?ixlib=rb-4.0.3&fit=crop&w=960&q=80&fm=avif"
+                  src="https://images.unsplash.com/photo-1606811841689-23dfddce3e95?ixlib=rb-4.0.3&fit=crop&w=640&q=80&fm=avif"
                   srcset="
+                    https://images.unsplash.com/photo-1606811841689-23dfddce3e95?ixlib=rb-4.0.3&fit=crop&w=384&q=80&fm=avif 384w,
                     https://images.unsplash.com/photo-1606811841689-23dfddce3e95?ixlib=rb-4.0.3&fit=crop&w=640&q=80&fm=avif 640w,
                     https://images.unsplash.com/photo-1606811841689-23dfddce3e95?ixlib=rb-4.0.3&fit=crop&w=960&q=80&fm=avif 960w,
                     https://images.unsplash.com/photo-1606811841689-23dfddce3e95?ixlib=rb-4.0.3&fit=crop&w=1200&q=80&fm=avif 1200w
@@ -363,7 +340,6 @@
                   loading="eager"
                 />
 
-                <!-- Floating Badge -->
                 <div
                   class="absolute bottom-6 left-6 bg-white/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-white/50 max-w-xs"
                 >
@@ -385,7 +361,6 @@
 
       <!-- Services Grid -->
       <section id="services" class="py-20 bg-gray-50 border-y border-gray-200">
-        <!-- unchanged -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="text-center max-w-3xl mx-auto mb-16">
             <h2 class="text-3xl font-bold tracking-tight text-gray-900 mb-4">Comprehensive Dental Services</h2>
@@ -396,7 +371,6 @@
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Service Card 1 -->
             <div
               class="group bg-white p-8 rounded-2xl border border-gray-200 shadow-sm hover:shadow-xl hover:shadow-gray-200/50 hover:border-[#97E45D] transition-all duration-300"
             >
@@ -411,11 +385,11 @@
                 Transform your smile with composite bonding, veneers, and aesthetic adjustments tailored to your face.
               </p>
               <a href="#" class="inline-flex items-center text-sm font-medium text-gray-900 hover:text-[#7ab848]">
-                Learn more <iconify-icon icon="solar:arrow-right-linear" width="16" class="ml-1" aria-hidden="true"></iconify-icon>
+                Learn more
+                <iconify-icon icon="solar:arrow-right-linear" width="16" class="ml-1" aria-hidden="true"></iconify-icon>
               </a>
             </div>
 
-            <!-- Service Card 2 -->
             <div
               class="group bg-white p-8 rounded-2xl border border-gray-200 shadow-sm hover:shadow-xl hover:shadow-gray-200/50 hover:border-[#97E45D] transition-all duration-300"
             >
@@ -430,11 +404,11 @@
                 Safe, professional whitening treatments to brighten your smile and boost your confidence.
               </p>
               <a href="#" class="inline-flex items-center text-sm font-medium text-gray-900 hover:text-[#7ab848]">
-                View options <iconify-icon icon="solar:arrow-right-linear" width="16" class="ml-1" aria-hidden="true"></iconify-icon>
+                View options
+                <iconify-icon icon="solar:arrow-right-linear" width="16" class="ml-1" aria-hidden="true"></iconify-icon>
               </a>
             </div>
 
-            <!-- Service Card 3 -->
             <div
               class="group bg-white p-8 rounded-2xl border border-gray-200 shadow-sm hover:shadow-xl hover:shadow-gray-200/50 hover:border-[#97E45D] transition-all duration-300"
             >
@@ -449,19 +423,73 @@
                 Same-day appointments available for toothaches, broken teeth, and urgent dental concerns.
               </p>
               <a href="#" class="inline-flex items-center text-sm font-medium text-gray-900 hover:text-[#7ab848]">
-                Get help now <iconify-icon icon="solar:arrow-right-linear" width="16" class="ml-1" aria-hidden="true"></iconify-icon>
+                Get help now
+                <iconify-icon icon="solar:arrow-right-linear" width="16" class="ml-1" aria-hidden="true"></iconify-icon>
               </a>
             </div>
 
-            <!-- (Service cards 4–6 unchanged except add width="16" on arrow icons if present) -->
-            <!-- Keep your existing markup; only add missing icon widths like above. -->
+            <div
+              class="group bg-white p-8 rounded-2xl border border-gray-200 shadow-sm hover:shadow-xl hover:shadow-gray-200/50 hover:border-[#97E45D] transition-all duration-300"
+            >
+              <div
+                class="w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center mb-6 group-hover:bg-[#97E45D] transition-colors duration-300"
+                aria-hidden="true"
+              >
+                <iconify-icon icon="solar:bolt-linear" class="text-gray-900" width="24" aria-hidden="true"></iconify-icon>
+              </div>
+              <h3 class="text-xl font-semibold text-gray-900 mb-3 tracking-tight">Root Canal</h3>
+              <p class="text-sm text-gray-700 leading-relaxed mb-4">
+                Expert endodontic therapy to save natural teeth and relieve pain effectively.
+              </p>
+              <a href="#" class="inline-flex items-center text-sm font-medium text-gray-900 hover:text-[#7ab848]">
+                Read more
+                <iconify-icon icon="solar:arrow-right-linear" width="16" class="ml-1" aria-hidden="true"></iconify-icon>
+              </a>
+            </div>
+
+            <div
+              class="group bg-white p-8 rounded-2xl border border-gray-200 shadow-sm hover:shadow-xl hover:shadow-gray-200/50 hover:border-[#97E45D] transition-all duration-300"
+            >
+              <div
+                class="w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center mb-6 group-hover:bg-[#97E45D] transition-colors duration-300"
+                aria-hidden="true"
+              >
+                <iconify-icon icon="solar:sort-vertical-linear" class="text-gray-900" width="24" aria-hidden="true"></iconify-icon>
+              </div>
+              <h3 class="text-xl font-semibold text-gray-900 mb-3 tracking-tight">Clear Aligners</h3>
+              <p class="text-sm text-gray-700 leading-relaxed mb-4">
+                Discreet orthodontic solutions to straighten your teeth without traditional metal braces.
+              </p>
+              <a href="#" class="inline-flex items-center text-sm font-medium text-gray-900 hover:text-[#7ab848]">
+                See results
+                <iconify-icon icon="solar:arrow-right-linear" width="16" class="ml-1" aria-hidden="true"></iconify-icon>
+              </a>
+            </div>
+
+            <div
+              class="group bg-white p-8 rounded-2xl border border-gray-200 shadow-sm hover:shadow-xl hover:shadow-gray-200/50 hover:border-[#97E45D] transition-all duration-300"
+            >
+              <div
+                class="w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center mb-6 group-hover:bg-[#97E45D] transition-colors duration-300"
+                aria-hidden="true"
+              >
+                <iconify-icon icon="solar:screws-linear" class="text-gray-900" width="24" aria-hidden="true"></iconify-icon>
+              </div>
+              <h3 class="text-xl font-semibold text-gray-900 mb-3 tracking-tight">Dental Implants</h3>
+              <p class="text-sm text-gray-700 leading-relaxed mb-4">
+                Permanent solutions for missing teeth, restoring both function and aesthetics.
+              </p>
+              <a href="#" class="inline-flex items-center text-sm font-medium text-gray-900 hover:text-[#7ab848]">
+                View procedure
+                <iconify-icon icon="solar:arrow-right-linear" width="16" class="ml-1" aria-hidden="true"></iconify-icon>
+              </a>
+            </div>
           </div>
         </div>
       </section>
 
       <!-- Membership Dark Section -->
       <section id="membership" class="py-20 bg-[#0a0a0a] text-white relative overflow-hidden">
-        <!-- unchanged -->
         <div
           class="absolute top-0 right-0 w-[500px] h-[500px] bg-[#97E45D] rounded-full blur-[120px] opacity-10 pointer-events-none"
           aria-hidden="true"
@@ -530,7 +558,7 @@
         </div>
       </section>
 
-      <!-- Testimonial / Social Proof -->
+      <!-- Testimonial -->
       <section class="py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -607,7 +635,6 @@
                 <p class="text-gray-700 mb-8">Fill out the form below or call us to book your consultation.</p>
 
                 <form class="space-y-6" method="post" action="#" accept-charset="UTF-8">
-                  <!-- unchanged -->
                   <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>
                       <label for="name" class="block text-sm font-medium text-gray-800 mb-2">Full Name</label>
@@ -683,12 +710,12 @@
                 </form>
               </div>
 
+              <!-- Map: click-to-load so it "works" in browsers that block embeds; no layout/design change -->
               <div class="bg-gray-100 relative min-h-[400px]">
-                <!-- Click-to-load map (prevents Lighthouse Issues/3P warnings during audits and fixes "map not working") -->
                 <div
                   class="absolute inset-0 bg-gray-300"
                   data-map-shell
-                  data-map-src="https://www.google.com/maps?q=12%20Cambridge%20Crescent%2C%20Harrogate%20HG1%201PE%2C%20UK&output=embed"
+                  data-map-src="https://www.google.com/maps?output=embed&q=12%20Cambridge%20Crescent%2C%20Harrogate%20HG1%201PE%2C%20UK"
                 >
                   <div class="absolute inset-0 flex items-center justify-center p-6">
                     <div class="w-full max-w-sm bg-white/90 backdrop-blur-md rounded-2xl border border-white/60 shadow-xl p-5">
@@ -714,16 +741,14 @@
                         </a>
                       </div>
                       <noscript>
-                        <p class="text-xs text-gray-700 mt-3">
-                          JavaScript is required to load the embedded map. Use “Open in Google Maps”.
-                        </p>
+                        <p class="text-xs text-gray-700 mt-3">JavaScript is required to load the embedded map.</p>
                       </noscript>
                     </div>
                   </div>
                 </div>
 
                 <div class="absolute bottom-6 left-6 right-6 bg-white p-6 rounded-xl shadow-lg border border-gray-100">
-                  <!-- FIX: h4 -> h3 for correct heading order (no visual change) -->
+                  <!-- h3 fixes heading-order accessibility without visual change -->
                   <h3 class="font-bold text-gray-900 mb-2">Visit Us</h3>
 
                   <div class="flex items-start gap-3 mb-3">
@@ -735,21 +760,19 @@
                   </div>
                   <div class="flex items-center gap-3">
                     <iconify-icon icon="solar:phone-linear" class="text-gray-500" width="18" aria-hidden="true"></iconify-icon>
-                    <a href="tel:01423531863" class="text-sm font-medium text-gray-900 hover:text-[#7ab848]"
-                      >01423 531863</a
-                    >
+                    <a href="tel:01423531863" class="text-sm font-medium text-gray-900 hover:text-[#7ab848]">01423 531863</a>
                   </div>
                 </div>
               </div>
+              <!-- /Map -->
             </div>
           </div>
         </div>
       </section>
     </main>
 
-    <!-- Footer (unchanged) -->
+    <!-- Footer -->
     <footer class="bg-[#0a0a0a] text-gray-300 py-12 border-t border-white/10">
-      <!-- your existing footer markup -->
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
           <div class="col-span-1 md:col-span-1">
@@ -812,7 +835,7 @@
       </div>
     </footer>
 
-    <!-- Map loader (tiny, avoids loading Google Maps during Lighthouse) -->
+    <!-- Map loader -->
     <script>
       (function () {
         var btn = document.querySelector("[data-load-map]");
