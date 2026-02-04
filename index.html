@@ -17,7 +17,7 @@
     <meta name="color-scheme" content="light" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
 
-    <!-- Open Graph -->
+    <!-- Open Graph (basic) -->
     <meta property="og:title" content="Crescent Dental Clinic | Private Dentist in Harrogate" />
     <meta
       property="og:description"
@@ -25,8 +25,6 @@
     />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://example.com/" />
-    <!-- Optional: set a real image once you have one -->
-    <!-- <meta property="og:image" content="https://example.com/assets/og.avif" /> -->
 
     <!-- =========================================================
       Favicon (inline SVG, zero-request)
@@ -37,59 +35,70 @@
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a0a0a'/%3E%3Cpath d='M20 40c4 4 20 4 24 0' stroke='%2397E45D' stroke-width='4' fill='none' stroke-linecap='round'/%3E%3Cpath d='M24 28c2-6 14-6 16 0' stroke='%23ffffff' stroke-width='4' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"
     />
 
-    <!-- Preload LCP image (same-origin asset for cache control) -->
-    <link rel="preload" as="image" href="assets/hero.avif" fetchpriority="high" />
+    <!-- Preload the LCP image (local AVIF) -->
+    <link rel="preload" as="image" href="assets/hero.avif" type="image/avif" fetchpriority="high" />
 
     <!-- =========================================================
-      CSS (self-contained; no Tailwind/Google Fonts/Iconify)
+      Preconnect (keep <= 4; only the most critical)
+    ========================================================== -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin />
+
+    <!-- =========================================================
+      Font loading (async stylesheet swap)
+      Note: For highest Lighthouse scores, self-host fonts.
+    ========================================================== -->
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+      />
+    </noscript>
+
+    <!-- Tailwind (CDN is convenient but not ideal for production perf) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Iconify (defer to reduce main-thread pressure) -->
+    <script
+      src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"
+      defer
+    ></script>
+
+    <!-- =========================================================
+      Site-level CSS (tokens + accessibility + small custom UI)
     ========================================================== -->
     <style>
       :root {
-        --bg: #fafafa;
-        --panel: #ffffff;
-        --text: #1a1a1a;
-        --muted: #5b6472;
-        --border: rgba(17, 24, 39, 0.10);
-        --border-strong: rgba(17, 24, 39, 0.18);
-        --shadow: 0 18px 50px rgba(0, 0, 0, 0.12);
-        --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.08);
-
         --accent: #97e45d;
-        --accent-hover: #86cf50;
         --accent-text: #2b6a00;
-
-        --black: #0a0a0a;
-        --radius-lg: 18px;
-        --radius-xl: 24px;
-
-        --container: 1280px;
-        --pad: 16px;
       }
 
-      * { box-sizing: border-box; }
-      html { scroll-behavior: smooth; }
       body {
-        margin: 0;
-        background: var(--bg);
-        color: var(--text);
-
-        /* System font stack (removes Google Fonts request) */
-        font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial,
-          "Apple Color Emoji", "Segoe UI Emoji";
+        font-family: "Plus Jakarta Sans", sans-serif;
+        background-color: #fafafa;
+        color: #1a1a1a;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
       }
 
-      /* Respect reduced motion */
       @media (prefers-reduced-motion: reduce) {
-        html { scroll-behavior: auto; }
-        * { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
+        html {
+          scroll-behavior: auto;
+        }
       }
 
-      /* Selection */
-      ::selection { background: var(--accent); color: #000; }
-
-      /* Skip link */
       .skip-link {
         position: absolute;
         left: -9999px;
@@ -98,639 +107,41 @@
         background: #fff;
         color: #000;
         border: 2px solid #000;
-        border-radius: 12px;
+        border-radius: 10px;
         z-index: 1000;
       }
-      .skip-link:focus { left: 12px; }
-
-      /* Utilities */
-      .container {
-        max-width: var(--container);
-        margin: 0 auto;
-        padding: 0 var(--pad);
-      }
-      .sr-only {
-        position: absolute !important;
-        width: 1px !important;
-        height: 1px !important;
-        padding: 0 !important;
-        margin: -1px !important;
-        overflow: hidden !important;
-        clip: rect(0, 0, 0, 0) !important;
-        white-space: nowrap !important;
-        border: 0 !important;
+      .skip-link:focus {
+        left: 12px;
       }
 
-      /* Icons */
-      .icon {
-        display: inline-block;
-        vertical-align: -0.125em;
-        width: 1em;
-        height: 1em;
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #d1d5db;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #9ca3af;
       }
 
-      /* Announcement */
-      .announcement {
-        background: #000;
-        color: #fff;
-        font-size: 12px;
-        font-weight: 600;
-        letter-spacing: 0.04em;
-        text-align: center;
-        padding: 8px var(--pad);
-      }
-      .announcement a {
-        color: var(--accent);
-        margin-left: 8px;
-        text-decoration: underline;
-      }
-      .announcement a:hover { color: #fff; }
-
-      /* Nav */
-      .nav {
-        position: sticky;
-        top: 0;
-        z-index: 50;
-        background: rgba(255, 255, 255, 0.82);
-        backdrop-filter: blur(16px);
-        border-bottom: 1px solid var(--border);
-      }
-      .nav__row {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        height: 64px;
-        gap: 12px;
-      }
-      .brand {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        text-decoration: none;
-        color: inherit;
-      }
-      .brand__mark {
-        width: 32px;
-        height: 32px;
-        border-radius: 10px;
-        background: var(--accent);
-        color: #000;
-        display: grid;
-        place-items: center;
-        flex: none;
-      }
-      .brand__name {
-        font-size: 18px;
-        line-height: 1;
-        font-weight: 800;
-        letter-spacing: -0.02em;
-        white-space: nowrap;
-      }
-      .brand__name span { font-weight: 600; color: #374151; }
-
-      .nav__menu {
-        display: none;
-        align-items: center;
-        gap: 26px;
-      }
-      .nav__menu a {
-        color: #4b5563;
-        text-decoration: none;
-        font-size: 14px;
-        font-weight: 600;
-      }
-      .nav__menu a:hover { color: #000; }
-
-      .btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        border-radius: 999px;
-        padding: 10px 16px;
-        font-weight: 800;
-        font-size: 14px;
-        text-decoration: none;
-        border: 1px solid transparent;
-        cursor: pointer;
-      }
-      .btn--primary {
-        background: var(--accent);
-        color: #000;
-      }
-      .btn--primary:hover { background: var(--accent-hover); }
-      .btn--primary:focus-visible {
-        outline: none;
-        box-shadow: 0 0 0 3px rgba(151, 228, 93, 0.45);
-      }
-
-      .nav__toggle {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 44px;
-        height: 44px;
-        border: 1px solid transparent;
-        background: transparent;
-        border-radius: 12px;
-        color: #4b5563;
-      }
-      .nav__toggle:hover { color: #000; background: rgba(0,0,0,0.04); }
-      .nav__toggle:focus-visible {
-        outline: none;
-        box-shadow: 0 0 0 3px rgba(151, 228, 93, 0.45);
-      }
-
-      .nav__mobile {
-        display: none;
-        padding: 8px 0 16px;
-        border-top: 1px solid var(--border);
-      }
-      .nav__mobile a {
-        display: block;
-        padding: 10px 0;
-        text-decoration: none;
-        color: #111827;
-        font-weight: 700;
-      }
-      .nav__mobile a:hover { color: #000; }
-
-      /* Hero */
-      .hero {
-        position: relative;
-        background: #fff;
-        padding: 64px 0 80px;
-        overflow: hidden;
-      }
-      .blob {
-        position: absolute;
-        width: 420px;
-        height: 420px;
-        border-radius: 999px;
-        filter: blur(48px);
-        opacity: 0.55;
-        pointer-events: none;
-      }
-      .blob--a { background: rgba(151, 228, 93, 0.15); top: -80px; right: -120px; }
-      .blob--b { background: rgba(219, 234, 254, 0.85); bottom: -120px; left: -120px; opacity: 0.45; }
-
-      .hero__grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 36px;
-        align-items: center;
-      }
-      .pill {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 6px 10px;
-        border-radius: 999px;
-        background: #f3f4f6;
-        border: 1px solid var(--border);
-        font-size: 12px;
-        font-weight: 700;
-        color: #374151;
-      }
-      .hero__title {
-        margin: 14px 0 0;
-        font-weight: 900;
-        letter-spacing: -0.03em;
-        line-height: 1.06;
-        font-size: 40px;
-        color: #111827;
-      }
-      .highlight {
-        position: relative;
-        display: inline-block;
-        white-space: nowrap;
-      }
-      .highlight::after {
-        content: "";
-        position: absolute;
-        left: 0;
-        bottom: 6px;
-        width: 100%;
-        height: 12px;
-        background: rgba(151, 228, 93, 0.40);
-        transform: rotate(1deg);
-        z-index: -1;
-      }
-      .hero__lead {
-        margin: 16px 0 0;
-        color: #374151;
-        font-size: 16px;
-        line-height: 1.7;
-        max-width: 560px;
-      }
-      .hero__actions {
-        margin-top: 22px;
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        max-width: 520px;
-      }
-      .btn-lg {
-        border-radius: 14px;
-        padding: 14px 18px;
-        font-size: 16px;
-        font-weight: 900;
-      }
-      .btn--ghost {
-        background: #fff;
-        border: 1px solid var(--border-strong);
-        color: #111827;
-      }
-      .btn--ghost:hover { background: #f9fafb; }
-
-      .trust {
-        margin-top: 26px;
-        padding-top: 18px;
-        border-top: 1px solid rgba(17, 24, 39, 0.08);
-        display: flex;
-        flex-wrap: wrap;
-        gap: 16px 22px;
-        color: rgba(17,24,39,0.72);
-        font-weight: 800;
-        font-size: 13px;
-      }
-      .trust__item { display: inline-flex; align-items: center; gap: 8px; }
-
-      .hero__media {
-        border-radius: var(--radius-xl);
-        overflow: hidden;
-        background: #f3f4f6;
-        box-shadow: var(--shadow);
-        position: relative;
-        aspect-ratio: 4 / 3;
-      }
-      .hero__media img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-        transform: scale(1);
-        transition: transform 700ms ease;
-      }
-      @media (hover: hover) {
-        .hero__media:hover img { transform: scale(1.05); }
-      }
-      .float-card {
-        position: absolute;
-        left: 18px;
-        bottom: 18px;
-        right: 18px;
-        max-width: 360px;
-        background: rgba(255, 255, 255, 0.92);
-        border: 1px solid rgba(255,255,255,0.60);
-        border-radius: 16px;
-        padding: 14px;
-        box-shadow: var(--shadow-soft);
-        backdrop-filter: blur(10px);
-      }
-      .float-card__row { display: flex; gap: 12px; align-items: flex-start; }
-      .float-card__badge {
-        width: 40px;
-        height: 40px;
-        border-radius: 12px;
-        background: rgba(151, 228, 93, 0.20);
-        color: #14532d;
-        display: grid;
-        place-items: center;
-        flex: none;
-      }
-      .float-card__title { margin: 0; font-weight: 900; font-size: 14px; color: #111827; }
-      .float-card__desc { margin: 4px 0 0; font-size: 12px; line-height: 1.55; color: #374151; }
-
-      /* Sections */
-      .section { padding: 80px 0; }
-      .section--muted {
-        background: #f3f4f6;
-        border-top: 1px solid var(--border);
-        border-bottom: 1px solid var(--border);
-      }
-      .section__head {
-        text-align: center;
-        max-width: 720px;
-        margin: 0 auto 48px;
-      }
-      .section__title {
-        margin: 0;
-        font-size: 30px;
-        font-weight: 900;
-        letter-spacing: -0.02em;
-        color: #111827;
-      }
-      .section__sub {
-        margin: 12px 0 0;
-        color: #374151;
-        line-height: 1.7;
-      }
-
-      /* Cards grid */
-      .cards {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 16px;
-      }
-      .card {
-        background: #fff;
-        border: 1px solid var(--border-strong);
-        border-radius: var(--radius-xl);
-        padding: 26px;
-        box-shadow: 0 1px 0 rgba(0,0,0,0.02);
-        transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
-      }
-      @media (hover: hover) {
-        .card:hover {
-          transform: translateY(-2px);
-          border-color: rgba(151, 228, 93, 0.85);
-          box-shadow: 0 18px 42px rgba(0,0,0,0.10);
-        }
-      }
-      .card__icon {
-        width: 48px;
-        height: 48px;
-        border-radius: 14px;
-        background: #f3f4f6;
-        display: grid;
-        place-items: center;
-        margin-bottom: 16px;
-        transition: background 220ms ease;
-        color: #111827;
-      }
-      @media (hover: hover) {
-        .card:hover .card__icon { background: var(--accent); }
-      }
-      .card__title {
-        margin: 0;
-        font-size: 18px;
-        font-weight: 900;
-        letter-spacing: -0.01em;
-        color: #111827;
-      }
-      .card__text {
-        margin: 10px 0 0;
-        font-size: 14px;
-        line-height: 1.7;
-        color: #374151;
-      }
-      .card__link {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        margin-top: 14px;
-        font-size: 14px;
-        font-weight: 800;
-        text-decoration: none;
-        color: #111827;
-      }
-      .card__link:hover { color: #2f6f12; }
-
-      /* Dark section */
-      .section--dark {
-        background: var(--black);
-        color: #fff;
-        position: relative;
-        overflow: hidden;
-      }
-      .glow {
-        position: absolute;
-        top: -140px;
-        right: -140px;
-        width: 520px;
-        height: 520px;
-        border-radius: 999px;
-        background: var(--accent);
-        filter: blur(120px);
-        opacity: 0.10;
-        pointer-events: none;
-      }
-      .dark-grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 28px;
-        align-items: center;
-      }
-      .tag {
-        display: inline-block;
-        padding: 6px 10px;
-        border-radius: 999px;
-        border: 1px solid rgba(151, 228, 93, 0.30);
-        background: rgba(151, 228, 93, 0.10);
-        color: var(--accent);
-        font-size: 12px;
-        font-weight: 900;
-        letter-spacing: 0.08em;
-      }
-      .dark-title {
-        margin: 14px 0 0;
-        font-size: 32px;
-        font-weight: 950;
-        letter-spacing: -0.02em;
-        line-height: 1.15;
-      }
-      .dark-lead {
-        margin: 12px 0 0;
-        color: rgba(255,255,255,0.78);
-        line-height: 1.7;
-        font-size: 16px;
-        max-width: 560px;
-      }
-      .checklist {
-        list-style: none;
-        padding: 0;
-        margin: 18px 0 0;
-        display: grid;
-        gap: 10px;
-      }
-      .checklist li {
-        display: flex;
-        gap: 10px;
-        align-items: flex-start;
-        color: rgba(255,255,255,0.85);
-        font-weight: 700;
-      }
-
-      .price-card {
-        position: relative;
-        border-radius: var(--radius-xl);
-        border: 1px solid rgba(255,255,255,0.15);
-        background: rgba(255,255,255,0.10);
-        backdrop-filter: blur(10px);
-        padding: 22px;
-      }
-      .badge {
-        position: absolute;
-        top: -12px;
-        right: -12px;
-        background: var(--accent);
-        color: #000;
-        font-weight: 950;
-        font-size: 12px;
-        padding: 6px 10px;
-        border-radius: 999px;
-      }
-      .price-card h3 { margin: 0; font-size: 18px; font-weight: 900; }
-      .price {
-        display: flex;
-        align-items: baseline;
-        gap: 8px;
-        margin-top: 10px;
-      }
-      .price strong { font-size: 34px; font-weight: 950; }
-      .price span { color: rgba(255,255,255,0.70); }
-      .rule { height: 1px; background: rgba(255,255,255,0.16); margin: 16px 0; }
-      .price-card p { margin: 0; color: rgba(255,255,255,0.82); line-height: 1.6; font-size: 14px; }
-      .price-card button {
-        margin-top: 16px;
-        width: 100%;
-        border-radius: 14px;
-        padding: 12px;
-        border: 1px solid rgba(255,255,255,0.30);
-        background: transparent;
-        color: #fff;
-        font-weight: 900;
-        cursor: pointer;
-      }
-      .price-card button:hover { background: #fff; color: #000; }
-
-      /* Testimonial */
-      .two-col {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 42px;
-        align-items: center;
-      }
-      .img-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 12px;
-      }
-      .img-grid img {
-        width: 100%;
-        height: 260px;
-        object-fit: cover;
-        border-radius: var(--radius-xl);
-        display: block;
-      }
-      .img-grid img.shift { transform: translateY(18px); }
-      .quote {
-        color: var(--accent);
-        font-size: 44px;
-        line-height: 1;
-        margin: 0 0 14px;
-        font-weight: 950;
-      }
-      .testimonial-title {
-        margin: 0;
-        color: #111827;
-        font-weight: 950;
-        letter-spacing: -0.02em;
-        line-height: 1.25;
-        font-size: 22px;
-      }
-      .meta {
-        margin-top: 14px;
-        display: flex;
-        align-items: center;
-        gap: 14px;
-        flex-wrap: wrap;
-      }
-      .meta strong { display: block; font-weight: 950; }
-      .meta small { display: block; color: #374151; }
-      .divider { width: 1px; height: 28px; background: rgba(17,24,39,0.12); }
-      .stars { color: var(--accent); display: inline-flex; gap: 4px; }
-      .reviews-link {
-        margin-top: 18px;
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        text-decoration: none;
-        font-weight: 900;
-        color: var(--accent-text);
-      }
-      .reviews-link:hover { color: #000; }
-
-      /* Contact */
-      .contact-wrap {
-        background: #fff;
-        border: 1px solid rgba(17,24,39,0.06);
-        border-radius: 28px;
-        overflow: hidden;
-        box-shadow: 0 20px 50px rgba(0,0,0,0.08);
-      }
-      .contact-grid {
-        display: grid;
-        grid-template-columns: 1fr;
-      }
-      .pad { padding: 26px; }
-      .contact-title {
-        margin: 0;
-        font-size: 30px;
-        font-weight: 950;
-        letter-spacing: -0.02em;
-        color: #111827;
-      }
-      .contact-sub { margin: 10px 0 0; color: #374151; }
-      form { margin-top: 18px; }
-      .field-grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 14px;
-      }
-      label {
-        display: block;
-        font-size: 13px;
-        font-weight: 900;
-        color: #1f2937;
-        margin-bottom: 8px;
-      }
-      input[type="text"],
-      input[type="tel"],
-      input[type="email"] {
-        width: 100%;
-        border-radius: 14px;
-        border: 1px solid rgba(17,24,39,0.18);
-        background: #f3f4f6;
-        padding: 12px 14px;
-        font-size: 14px;
-        outline: none;
-      }
-      input:focus-visible {
-        border-color: rgba(151, 228, 93, 0.95);
-        box-shadow: 0 0 0 3px rgba(151, 228, 93, 0.35);
-      }
-
-      fieldset {
-        border: 0;
-        padding: 0;
-        margin: 16px 0 0;
-      }
-      legend {
-        font-size: 13px;
-        font-weight: 900;
-        color: #1f2937;
-        margin-bottom: 10px;
-      }
-      .checks {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px 14px;
-      }
-
-      /* Custom checkbox */
       .custom-checkbox {
         appearance: none;
         background-color: #fff;
         margin: 0;
+        font: inherit;
+        color: currentColor;
         width: 1.15em;
         height: 1.15em;
-        border: 1px solid #cbd5e1;
-        border-radius: 0.35em;
+        border: 1px solid #d1d5db;
+        border-radius: 0.25em;
         display: grid;
         place-content: center;
-        transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+        transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out,
+          box-shadow 0.2s ease-in-out;
       }
       .custom-checkbox::before {
         content: "";
@@ -743,453 +154,193 @@
         clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
       }
       .custom-checkbox:checked {
-        background-color: #111827;
-        border-color: #111827;
+        background-color: #1a1a1a;
+        border-color: #1a1a1a;
       }
-      .custom-checkbox:checked::before { transform: scale(1); }
+      .custom-checkbox:checked::before {
+        transform: scale(1);
+      }
       .custom-checkbox:focus-visible {
         outline: none;
-        box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgba(151, 228, 93, 0.75);
+        box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--accent);
       }
 
-      .check-label {
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        cursor: pointer;
-        user-select: none;
-      }
-      .check-label span {
-        font-size: 14px;
-        color: #374151;
-        font-weight: 700;
+      iconify-icon {
+        display: inline-block;
+        vertical-align: -0.125em;
       }
 
-      .submit {
-        margin-top: 16px;
-        width: 100%;
+      /* Map iframe styling moved out of inline style (future CSP-friendly) */
+      .map-iframe {
         border: 0;
-        border-radius: 14px;
-        padding: 14px 16px;
-        background: var(--accent);
-        color: #000;
-        font-weight: 950;
-        font-size: 16px;
-        cursor: pointer;
-      }
-      .submit:hover { filter: brightness(1.03); box-shadow: 0 12px 26px rgba(151, 228, 93, 0.25); }
-      .submit:focus-visible {
-        outline: none;
-        box-shadow: 0 0 0 3px rgba(151, 228, 93, 0.45);
-      }
-
-      /* Map area (no third-party iframe on load) */
-      .map {
-        background: #e5e7eb;
-        min-height: 420px;
-        position: relative;
-      }
-      .map__preview {
-        position: absolute;
-        inset: 0;
-        display: grid;
-        place-items: center;
-      }
-      .map__preview img {
         width: 100%;
         height: 100%;
-        object-fit: cover;
-        filter: grayscale(100%);
-        display: block;
-      }
-      .map__overlay {
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(to bottom, rgba(0,0,0,0.06), rgba(0,0,0,0.12));
-        pointer-events: none;
-      }
-      .map__cta {
-        position: absolute;
-        top: 18px;
-        left: 18px;
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-      }
-      .pill-btn {
-        border-radius: 999px;
-        padding: 10px 14px;
-        border: 1px solid rgba(255,255,255,0.60);
-        background: rgba(255,255,255,0.90);
-        color: #111827;
-        font-weight: 950;
-        cursor: pointer;
-      }
-      .pill-btn:hover { background: #fff; }
-      .pill-btn:focus-visible {
-        outline: none;
-        box-shadow: 0 0 0 3px rgba(151, 228, 93, 0.45);
-      }
-      .map__frame {
-        position: absolute;
-        inset: 0;
-        display: none;
-      }
-      .map__frame iframe {
-        width: 100%;
-        height: 100%;
-        border: 0;
         filter: grayscale(100%);
       }
-
-      .visit {
-        position: absolute;
-        left: 18px;
-        right: 18px;
-        bottom: 18px;
-        background: #fff;
-        border-radius: 16px;
-        border: 1px solid rgba(17,24,39,0.06);
-        padding: 16px;
-        box-shadow: 0 14px 30px rgba(0,0,0,0.10);
-        max-width: 520px;
-      }
-      .visit h3 { /* FIX: h3 (not h4) to preserve heading order */
-        margin: 0 0 10px;
-        font-weight: 950;
-        color: #111827;
-        font-size: 14px;
-      }
-      .visit p { margin: 0; color: #374151; font-weight: 700; font-size: 13px; line-height: 1.5; }
-      .visit a { color: #111827; font-weight: 950; text-decoration: none; }
-      .visit a:hover { color: #2f6f12; }
-
-      /* Footer */
-      footer {
-        background: var(--black);
-        color: rgba(255,255,255,0.80);
-        border-top: 1px solid rgba(255,255,255,0.10);
-        padding: 54px 0;
-      }
-      .footer-grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 22px;
-        margin-bottom: 30px;
-      }
-      .footer-brand {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin-bottom: 12px;
-        color: #fff;
-        font-weight: 950;
-        letter-spacing: -0.01em;
-      }
-      .footer-mark {
-        width: 26px;
-        height: 26px;
-        border-radius: 8px;
-        background: var(--accent);
-        color: #000;
-        display: grid;
-        place-items: center;
-        flex: none;
-      }
-      .footer h3 {
-        margin: 0 0 12px;
-        color: #fff;
-        font-weight: 950;
-        font-size: 14px;
-      }
-      .footer ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
-      .footer a { color: rgba(255,255,255,0.80); text-decoration: none; font-weight: 800; font-size: 13px; }
-      .footer a:hover { color: var(--accent); }
-
-      .social {
-        display: flex;
-        gap: 12px;
-        margin-bottom: 12px;
-      }
-      .social a {
-        width: 42px;
-        height: 42px;
-        border-radius: 14px;
-        display: grid;
-        place-items: center;
-        border: 1px solid rgba(255,255,255,0.12);
-      }
-      .social a:hover { border-color: rgba(151,228,93,0.55); color: #fff; }
-
-      .footer-bottom {
-        border-top: 1px solid rgba(255,255,255,0.10);
-        padding-top: 18px;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        align-items: flex-start;
-        font-size: 12px;
-      }
-      .footer-bottom .links {
-        display: flex;
-        gap: 18px;
-        flex-wrap: wrap;
-      }
-
-      /* Responsive */
-      @media (min-width: 640px) {
-        :root { --pad: 20px; }
-        .hero__actions { flex-direction: row; }
-        .field-grid { grid-template-columns: 1fr 1fr; }
-      }
-      @media (min-width: 768px) {
-        .nav__menu { display: flex; }
-        .nav__toggle { display: none; }
-        .cards { grid-template-columns: 1fr 1fr; }
-        .footer-grid { grid-template-columns: 1.2fr 1fr 1fr 1fr; gap: 24px; }
-        .footer-bottom { flex-direction: row; justify-content: space-between; align-items: center; }
-      }
-      @media (min-width: 1024px) {
-        .hero { padding: 86px 0 104px; }
-        .hero__grid { grid-template-columns: 1fr 1fr; gap: 56px; }
-        .hero__title { font-size: 56px; }
-        .cards { grid-template-columns: 1fr 1fr 1fr; }
-        .dark-grid { grid-template-columns: 1fr 0.9fr; gap: 40px; }
-        .two-col { grid-template-columns: 1fr 1fr; gap: 56px; }
-        .contact-grid { grid-template-columns: 1fr 1fr; }
-      }
-
-      /* Small custom scrollbar (cosmetic) */
-      ::-webkit-scrollbar { width: 8px; }
-      ::-webkit-scrollbar-track { background: #f1f1f1; }
-      ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
-      ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
     </style>
-
-    <!-- =========================================================
-      Structured data (SEO; should validate cleanly)
-    ========================================================== -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "Dentist",
-        "name": "Crescent Dental Clinic",
-        "url": "https://example.com/",
-        "telephone": "+44-1423-531863",
-        "address": {
-          "@type": "PostalAddress",
-          "streetAddress": "12 Cambridge Crescent",
-          "addressLocality": "Harrogate",
-          "postalCode": "HG1 1PE",
-          "addressCountry": "GB"
-        }
-      }
-    </script>
   </head>
 
-  <body>
+  <body class="antialiased selection:bg-[#97E45D] selection:text-black">
     <a class="skip-link" href="#main-content">Skip to main content</a>
+
     <div id="top"></div>
 
-    <!-- SVG sprite (inline icons; zero JS/network) -->
-    <svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
-      <!-- Simple, lightweight line icons (approximate) -->
-      <symbol id="i-medkit" viewBox="0 0 24 24">
-        <path d="M9 7V6a3 3 0 0 1 6 0v1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-        <path d="M5 7h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
-        <path d="M12 11v6M9 14h6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-      </symbol>
-
-      <symbol id="i-arrow-right" viewBox="0 0 24 24">
-        <path d="M5 12h12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-        <path d="M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-      </symbol>
-
-      <symbol id="i-arrow-up-right" viewBox="0 0 24 24">
-        <path d="M7 17 17 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-        <path d="M10 7h7v7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-      </symbol>
-
-      <symbol id="i-menu" viewBox="0 0 24 24">
-        <path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-      </symbol>
-
-      <symbol id="i-star" viewBox="0 0 24 24">
-        <path
-          d="M12 17.3 6.6 20l1.2-6.1L3 9.4l6.2-.7L12 3l2.8 5.7 6.2.7-4.8 4.5 1.2 6.1z"
-          fill="currentColor"
-        />
-      </symbol>
-
-      <symbol id="i-shield" viewBox="0 0 24 24">
-        <path d="M12 3l8 4v6c0 5-3.3 9-8 10-4.7-1-8-5-8-10V7l8-4Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
-        <path d="M8 12l2.2 2.2L16 8.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-      </symbol>
-
-      <symbol id="i-heart" viewBox="0 0 24 24">
-        <path d="M12 21s-7-4.6-9.4-9.3A5.5 5.5 0 0 1 12 6.9a5.5 5.5 0 0 1 9.4 4.8C19 16.4 12 21 12 21Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
-      </symbol>
-
-      <symbol id="i-clock" viewBox="0 0 24 24">
-        <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/>
-        <path d="M12 7v6l4 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-      </symbol>
-
-      <symbol id="i-phone" viewBox="0 0 24 24">
-        <path d="M6.5 3.5 9 6c.6.6.7 1.5.2 2.2l-1 1.5c1 2 2.7 3.6 4.7 4.7l1.5-1c.7-.5 1.6-.4 2.2.2l2.5 2.5c.7.7.7 1.8 0 2.5l-1 1c-1 .9-2.5 1.2-3.8.8-8-2.4-14.3-8.7-16.7-16.7-.4-1.3-.1-2.8.8-3.8l1-1c.7-.7 1.8-.7 2.5 0Z"
-          fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-      </symbol>
-
-      <symbol id="i-check" viewBox="0 0 24 24">
-        <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/>
-        <path d="M8 12l2.2 2.2L16 8.8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-      </symbol>
-
-      <symbol id="i-pin" viewBox="0 0 24 24">
-        <path d="M12 21s6-4.4 6-10a6 6 0 1 0-12 0c0 5.6 6 10 6 10Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
-        <circle cx="12" cy="11" r="2" fill="none" stroke="currentColor" stroke-width="1.8"/>
-      </symbol>
-
-      <symbol id="i-smile" viewBox="0 0 24 24">
-        <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/>
-        <path d="M8 14c1 2 7 2 8 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-        <path d="M9 10h.01M15 10h.01" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
-      </symbol>
-
-      <!-- Service icons (simple placeholders to keep look consistent) -->
-      <symbol id="i-sparkle" viewBox="0 0 24 24">
-        <path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5L12 3Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
-        <path d="M19 13l.8 2.2L22 16l-2.2.8L19 19l-.8-2.2L16 16l2.2-.8L19 13Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
-      </symbol>
-
-      <symbol id="i-bolt" viewBox="0 0 24 24">
-        <path d="M13 2 4 14h7l-1 8 10-14h-7l0-6Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
-      </symbol>
-
-      <symbol id="i-align" viewBox="0 0 24 24">
-        <path d="M8 6h8M6 12h12M8 18h8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-      </symbol>
-
-      <symbol id="i-screw" viewBox="0 0 24 24">
-        <path d="M9 3h6v6l-1 1v10a2 2 0 0 1-4 0V10l-1-1V3Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
-        <path d="M9 6h6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-      </symbol>
-
-      <!-- Social placeholders -->
-      <symbol id="i-facebook" viewBox="0 0 24 24">
-        <path d="M14 8h2V5h-2c-2.2 0-4 1.8-4 4v2H8v3h2v7h3v-7h2.3l.7-3H13V9c0-.6.4-1 1-1Z"
-          fill="currentColor"/>
-      </symbol>
-      <symbol id="i-instagram" viewBox="0 0 24 24">
-        <rect x="6" y="6" width="12" height="12" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/>
-        <circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/>
-        <circle cx="16.5" cy="7.5" r="1" fill="currentColor"/>
-      </symbol>
-    </svg>
-
     <!-- Announcement Bar -->
-    <div class="announcement">
-      <span style="opacity:0.92;">Accepting new private patients in Harrogate.</span>
-      <a href="#contact">Register now →</a>
+    <div class="bg-black text-white text-xs font-medium py-2 text-center tracking-wide">
+      <span class="opacity-90">Accepting new private patients in Harrogate.</span>
+      <a
+        href="#contact"
+        class="underline ml-2 text-[#97E45D] hover:text-white transition-colors duration-300"
+      >
+        Register now &rarr;
+      </a>
     </div>
 
     <!-- Navigation -->
-    <nav class="nav" aria-label="Primary">
-      <div class="container">
-        <div class="nav__row">
-          <a href="#top" class="brand">
-            <span class="brand__mark" aria-hidden="true">
-              <svg class="icon" width="20" height="20" aria-hidden="true"><use href="#i-medkit"></use></svg>
-            </span>
-            <span class="brand__name">Crescent <span>Dental</span></span>
-          </a>
-
-          <div class="nav__menu" aria-label="Primary links">
-            <a href="#services">Services</a>
-            <a href="#team">Team</a>
-            <a href="#membership">Membership</a>
-            <a href="#fees">Fees</a>
-            <a class="btn btn--primary" href="#contact">
-              Book Appointment
-              <svg class="icon" width="16" height="16" aria-hidden="true"><use href="#i-arrow-right"></use></svg>
+    <nav
+      class="sticky top-0 z-50 w-full backdrop-blur-xl bg-white/80 border-b border-gray-200/50"
+      aria-label="Primary"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+          <!-- Logo -->
+          <div class="flex-shrink-0 flex items-center gap-2">
+            <div
+              class="w-8 h-8 bg-[#97E45D] rounded-lg flex items-center justify-center text-black"
+              aria-hidden="true"
+            >
+              <iconify-icon
+                icon="solar:medical-kit-linear"
+                width="20"
+                stroke-width="1.5"
+                aria-hidden="true"
+              ></iconify-icon>
+            </div>
+            <a href="#top" class="text-lg font-bold tracking-tight text-gray-900 leading-none">
+              Crescent <span class="text-gray-700 font-medium">Dental</span>
             </a>
           </div>
 
-          <button
-            type="button"
-            class="nav__toggle"
-            aria-label="Open menu"
-            aria-expanded="false"
-            aria-controls="mobile-menu"
-            data-nav-toggle
-          >
-            <svg class="icon" width="24" height="24" aria-hidden="true"><use href="#i-menu"></use></svg>
-          </button>
-        </div>
+          <!-- Desktop Menu -->
+          <div class="hidden md:flex items-center space-x-8">
+            <a href="#services" class="text-sm font-medium text-gray-600 hover:text-black transition-colors"
+              >Services</a
+            >
+            <a href="#team" class="text-sm font-medium text-gray-600 hover:text-black transition-colors">Team</a>
+            <a
+              href="#membership"
+              class="text-sm font-medium text-gray-600 hover:text-black transition-colors"
+              >Membership</a
+            >
+            <a href="#fees" class="text-sm font-medium text-gray-600 hover:text-black transition-colors">Fees</a>
 
-        <div class="nav__mobile" id="mobile-menu">
-          <a href="#services">Services</a>
-          <a href="#team">Team</a>
-          <a href="#membership">Membership</a>
-          <a href="#fees">Fees</a>
-          <a href="#contact">Book Appointment</a>
+            <a
+              href="#contact"
+              class="group relative inline-flex items-center justify-center px-4 py-2 text-sm font-semibold text-black transition-all duration-200 bg-[#97E45D] border border-transparent rounded-full hover:bg-[#86cf50] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#97E45D]"
+            >
+              <span>Book Appointment</span>
+              <iconify-icon
+                icon="solar:arrow-right-linear"
+                class="ml-1 transition-transform group-hover:translate-x-1"
+                width="16"
+                aria-hidden="true"
+              ></iconify-icon>
+            </a>
+          </div>
+
+          <!-- Mobile Menu Button -->
+          <div class="md:hidden flex items-center">
+            <button
+              type="button"
+              class="text-gray-600 hover:text-black focus:outline-none p-2"
+              aria-label="Open menu"
+              aria-expanded="false"
+            >
+              <iconify-icon icon="solar:hamburger-menu-linear" width="24" aria-hidden="true"></iconify-icon>
+            </button>
+          </div>
         </div>
       </div>
     </nav>
 
     <main id="main-content">
-      <!-- Hero -->
-      <section class="hero">
-        <div class="blob blob--a" aria-hidden="true"></div>
-        <div class="blob blob--b" aria-hidden="true"></div>
+      <!-- Hero Section -->
+      <section class="relative pt-16 pb-20 lg:pt-24 lg:pb-28 overflow-hidden bg-white">
+        <!-- Background Decor -->
+        <div
+          class="absolute top-0 right-0 -translate-y-12 translate-x-12 w-96 h-96 bg-[#97E45D]/10 rounded-full blur-3xl opacity-50"
+          aria-hidden="true"
+        ></div>
+        <div
+          class="absolute bottom-0 left-0 translate-y-12 -translate-x-12 w-96 h-96 bg-blue-50 rounded-full blur-3xl opacity-50"
+          aria-hidden="true"
+        ></div>
 
-        <div class="container">
-          <div class="hero__grid">
-            <div>
-              <div class="pill">
-                <svg class="icon" width="16" height="16" aria-hidden="true" style="color:var(--accent-hover)"><use href="#i-star"></use></svg>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+            <div class="w-full lg:w-1/2 text-center lg:text-left">
+              <div
+                class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gray-100 border border-gray-200 text-xs font-medium text-gray-700 mb-6"
+              >
+                <iconify-icon icon="solar:star-linear" class="text-[#86cf50]" aria-hidden="true"></iconify-icon>
                 Serving Harrogate for 32+ Years
               </div>
 
-              <h1 class="hero__title">
-                Compassionate dental care for the <span class="highlight">whole family.</span>
+              <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-gray-900 mb-6 leading-[1.1]">
+                Compassionate dental care for the
+                <span class="relative whitespace-nowrap">
+                  <span class="relative z-10">whole family.</span>
+                  <span class="absolute bottom-1 left-0 w-full h-3 bg-[#97E45D]/40 -z-10 rotate-1"></span>
+                </span>
               </h1>
 
-              <p class="hero__lead">
+              <p class="text-lg text-gray-700 mb-8 max-w-lg mx-auto lg:mx-0 leading-relaxed">
                 We are a private practice in Harrogate dedicated to consistent, high-quality dentistry. From routine
                 check-ups to cosmetic transformations and emergency care.
               </p>
 
-              <div class="hero__actions">
-                <a class="btn btn--primary btn-lg" href="#contact">Request Appointment</a>
-                <a class="btn btn--ghost btn-lg" href="tel:01423531863">
-                  <svg class="icon" width="20" height="20" aria-hidden="true"><use href="#i-phone"></use></svg>
+              <div class="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start">
+                <a
+                  href="#contact"
+                  class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 text-base font-semibold text-black transition-all duration-200 bg-[#97E45D] border border-transparent rounded-lg hover:shadow-lg hover:shadow-[#97E45D]/30 hover:-translate-y-0.5"
+                >
+                  Request Appointment
+                </a>
+                <a
+                  href="tel:01423531863"
+                  class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 text-base font-semibold text-gray-900 transition-all duration-200 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-gray-300"
+                >
+                  <iconify-icon icon="solar:phone-calling-linear" class="mr-2" width="20" aria-hidden="true"></iconify-icon>
                   01423 531863
                 </a>
               </div>
 
-              <div class="trust" aria-label="Trust indicators">
-                <div class="trust__item">
-                  <svg class="icon" width="18" height="18" aria-hidden="true"><use href="#i-shield"></use></svg>
-                  CQC Regulated
+              <!-- Trust Indicators -->
+              <div
+                class="mt-10 pt-8 border-t border-gray-100 flex flex-wrap justify-center lg:justify-start gap-8 opacity-70 grayscale hover:grayscale-0 transition-all duration-500"
+              >
+                <div class="flex items-center gap-2">
+                  <iconify-icon icon="solar:shield-check-linear" width="20" aria-hidden="true"></iconify-icon>
+                  <span class="text-sm font-semibold">CQC Regulated</span>
                 </div>
-                <div class="trust__item">
-                  <svg class="icon" width="18" height="18" aria-hidden="true"><use href="#i-heart"></use></svg>
-                  Family Run
+                <div class="flex items-center gap-2">
+                  <iconify-icon icon="solar:heart-angle-linear" width="20" aria-hidden="true"></iconify-icon>
+                  <span class="text-sm font-semibold">Family Run</span>
                 </div>
-                <div class="trust__item">
-                  <svg class="icon" width="18" height="18" aria-hidden="true"><use href="#i-clock"></use></svg>
-                  Same Day Emergency
+                <div class="flex items-center gap-2">
+                  <iconify-icon icon="solar:clock-circle-linear" width="20" aria-hidden="true"></iconify-icon>
+                  <span class="text-sm font-semibold">Same Day Emergency</span>
                 </div>
               </div>
             </div>
 
-            <div>
-              <div class="hero__media">
-                <!-- LCP image (self-hosted AVIF for cache + size control) -->
+            <div class="w-full lg:w-1/2 relative">
+              <div class="aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl bg-gray-100 relative group">
+                <!-- LCP Image: local AVIF + explicit dimensions + high priority -->
                 <img
                   src="assets/hero.avif"
                   alt="Modern dental clinic interior"
+                  class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   width="1200"
                   height="900"
                   decoding="async"
@@ -1197,223 +348,332 @@
                   loading="eager"
                 />
 
-                <div class="float-card" role="note" aria-label="Cosmetic Dentistry highlight">
-                  <div class="float-card__row">
-                    <div class="float-card__badge" aria-hidden="true">
-                      <svg class="icon" width="22" height="22" aria-hidden="true"><use href="#i-smile"></use></svg>
+                <!-- Floating Badge -->
+                <div
+                  class="absolute bottom-6 left-6 bg-white/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-white/50 max-w-xs"
+                >
+                  <div class="flex items-start gap-3">
+                    <div class="p-2 bg-[#97E45D]/20 rounded-lg text-green-800" aria-hidden="true">
+                      <iconify-icon icon="solar:smile-circle-linear" width="24" aria-hidden="true"></iconify-icon>
                     </div>
                     <div>
-                      <p class="float-card__title">Cosmetic Dentistry</p>
-                      <p class="float-card__desc">Enhance your smile with whitening &amp; bonding.</p>
+                      <p class="text-sm font-bold text-gray-900">Cosmetic Dentistry</p>
+                      <p class="text-xs text-gray-700 mt-1">Enhance your smile with whitening &amp; bonding.</p>
                     </div>
                   </div>
                 </div>
               </div>
-              <p class="sr-only">Hero image shows the clinic environment.</p>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- Services -->
-      <section id="services" class="section section--muted">
-        <div class="container">
-          <div class="section__head">
-            <h2 class="section__title">Comprehensive Dental Services</h2>
-            <p class="section__sub">
+      <!-- Services Grid -->
+      <section id="services" class="py-20 bg-gray-50 border-y border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center max-w-3xl mx-auto mb-16">
+            <h2 class="text-3xl font-bold tracking-tight text-gray-900 mb-4">Comprehensive Dental Services</h2>
+            <p class="text-gray-700">
               From routine hygiene to complex restoration, our experienced team provides a full range of treatments in a
               relaxed environment.
             </p>
           </div>
 
-          <div class="cards" role="list">
-            <article class="card" role="listitem">
-              <div class="card__icon" aria-hidden="true">
-                <svg class="icon" width="22" height="22" aria-hidden="true"><use href="#i-smile"></use></svg>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Service Card 1 -->
+            <div
+              class="group bg-white p-8 rounded-2xl border border-gray-200 shadow-sm hover:shadow-xl hover:shadow-gray-200/50 hover:border-[#97E45D] transition-all duration-300"
+            >
+              <div
+                class="w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center mb-6 group-hover:bg-[#97E45D] transition-colors duration-300"
+                aria-hidden="true"
+              >
+                <iconify-icon icon="solar:cosmetic-linear" class="text-gray-900" width="24" aria-hidden="true"></iconify-icon>
               </div>
-              <h3 class="card__title">Cosmetic Dentistry</h3>
-              <p class="card__text">Transform your smile with composite bonding, veneers, and aesthetic adjustments tailored to your face.</p>
-              <a href="#" class="card__link">Learn more <svg class="icon" width="16" height="16" aria-hidden="true"><use href="#i-arrow-right"></use></svg></a>
-            </article>
+              <h3 class="text-xl font-semibold text-gray-900 mb-3 tracking-tight">Cosmetic Dentistry</h3>
+              <p class="text-sm text-gray-700 leading-relaxed mb-4">
+                Transform your smile with composite bonding, veneers, and aesthetic adjustments tailored to your face.
+              </p>
+              <a href="#" class="inline-flex items-center text-sm font-medium text-gray-900 hover:text-[#7ab848]"
+                >Learn more <iconify-icon icon="solar:arrow-right-linear" class="ml-1" aria-hidden="true"></iconify-icon
+              ></a>
+            </div>
 
-            <article class="card" role="listitem">
-              <div class="card__icon" aria-hidden="true">
-                <svg class="icon" width="22" height="22" aria-hidden="true"><use href="#i-sparkle"></use></svg>
+            <!-- Service Card 2 -->
+            <div
+              class="group bg-white p-8 rounded-2xl border border-gray-200 shadow-sm hover:shadow-xl hover:shadow-gray-200/50 hover:border-[#97E45D] transition-all duration-300"
+            >
+              <div
+                class="w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center mb-6 group-hover:bg-[#97E45D] transition-colors duration-300"
+                aria-hidden="true"
+              >
+                <iconify-icon icon="solar:star-shine-linear" class="text-gray-900" width="24" aria-hidden="true"></iconify-icon>
               </div>
-              <h3 class="card__title">Teeth Whitening</h3>
-              <p class="card__text">Safe, professional whitening treatments to brighten your smile and boost your confidence.</p>
-              <a href="#" class="card__link">View options <svg class="icon" width="16" height="16" aria-hidden="true"><use href="#i-arrow-right"></use></svg></a>
-            </article>
+              <h3 class="text-xl font-semibold text-gray-900 mb-3 tracking-tight">Teeth Whitening</h3>
+              <p class="text-sm text-gray-700 leading-relaxed mb-4">
+                Safe, professional whitening treatments to brighten your smile and boost your confidence.
+              </p>
+              <a href="#" class="inline-flex items-center text-sm font-medium text-gray-900 hover:text-[#7ab848]"
+                >View options <iconify-icon icon="solar:arrow-right-linear" class="ml-1" aria-hidden="true"></iconify-icon
+              ></a>
+            </div>
 
-            <article class="card" role="listitem">
-              <div class="card__icon" aria-hidden="true">
-                <svg class="icon" width="22" height="22" aria-hidden="true"><use href="#i-medkit"></use></svg>
+            <!-- Service Card 3 -->
+            <div
+              class="group bg-white p-8 rounded-2xl border border-gray-200 shadow-sm hover:shadow-xl hover:shadow-gray-200/50 hover:border-[#97E45D] transition-all duration-300"
+            >
+              <div
+                class="w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center mb-6 group-hover:bg-[#97E45D] transition-colors duration-300"
+                aria-hidden="true"
+              >
+                <iconify-icon icon="solar:medical-kit-linear" class="text-gray-900" width="24" aria-hidden="true"></iconify-icon>
               </div>
-              <h3 class="card__title">Emergency Care</h3>
-              <p class="card__text">Same-day appointments available for toothaches, broken teeth, and urgent dental concerns.</p>
-              <a href="#" class="card__link">Get help now <svg class="icon" width="16" height="16" aria-hidden="true"><use href="#i-arrow-right"></use></svg></a>
-            </article>
+              <h3 class="text-xl font-semibold text-gray-900 mb-3 tracking-tight">Emergency Care</h3>
+              <p class="text-sm text-gray-700 leading-relaxed mb-4">
+                Same-day appointments available for toothaches, broken teeth, and urgent dental concerns.
+              </p>
+              <a href="#" class="inline-flex items-center text-sm font-medium text-gray-900 hover:text-[#7ab848]"
+                >Get help now <iconify-icon icon="solar:arrow-right-linear" class="ml-1" aria-hidden="true"></iconify-icon
+              ></a>
+            </div>
 
-            <article class="card" role="listitem">
-              <div class="card__icon" aria-hidden="true">
-                <svg class="icon" width="22" height="22" aria-hidden="true"><use href="#i-bolt"></use></svg>
+            <!-- Service Card 4 -->
+            <div
+              class="group bg-white p-8 rounded-2xl border border-gray-200 shadow-sm hover:shadow-xl hover:shadow-gray-200/50 hover:border-[#97E45D] transition-all duration-300"
+            >
+              <div
+                class="w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center mb-6 group-hover:bg-[#97E45D] transition-colors duration-300"
+                aria-hidden="true"
+              >
+                <iconify-icon icon="solar:bolt-linear" class="text-gray-900" width="24" aria-hidden="true"></iconify-icon>
               </div>
-              <h3 class="card__title">Root Canal</h3>
-              <p class="card__text">Expert endodontic therapy to save natural teeth and relieve pain effectively.</p>
-              <a href="#" class="card__link">Read more <svg class="icon" width="16" height="16" aria-hidden="true"><use href="#i-arrow-right"></use></svg></a>
-            </article>
+              <h3 class="text-xl font-semibold text-gray-900 mb-3 tracking-tight">Root Canal</h3>
+              <p class="text-sm text-gray-700 leading-relaxed mb-4">
+                Expert endodontic therapy to save natural teeth and relieve pain effectively.
+              </p>
+              <a href="#" class="inline-flex items-center text-sm font-medium text-gray-900 hover:text-[#7ab848]"
+                >Read more <iconify-icon icon="solar:arrow-right-linear" class="ml-1" aria-hidden="true"></iconify-icon
+              ></a>
+            </div>
 
-            <article class="card" role="listitem">
-              <div class="card__icon" aria-hidden="true">
-                <svg class="icon" width="22" height="22" aria-hidden="true"><use href="#i-align"></use></svg>
+            <!-- Service Card 5 -->
+            <div
+              class="group bg-white p-8 rounded-2xl border border-gray-200 shadow-sm hover:shadow-xl hover:shadow-gray-200/50 hover:border-[#97E45D] transition-all duration-300"
+            >
+              <div
+                class="w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center mb-6 group-hover:bg-[#97E45D] transition-colors duration-300"
+                aria-hidden="true"
+              >
+                <iconify-icon icon="solar:sort-vertical-linear" class="text-gray-900" width="24" aria-hidden="true"></iconify-icon>
               </div>
-              <h3 class="card__title">Clear Aligners</h3>
-              <p class="card__text">Discreet orthodontic solutions to straighten your teeth without traditional metal braces.</p>
-              <a href="#" class="card__link">See results <svg class="icon" width="16" height="16" aria-hidden="true"><use href="#i-arrow-right"></use></svg></a>
-            </article>
+              <h3 class="text-xl font-semibold text-gray-900 mb-3 tracking-tight">Clear Aligners</h3>
+              <p class="text-sm text-gray-700 leading-relaxed mb-4">
+                Discreet orthodontic solutions to straighten your teeth without traditional metal braces.
+              </p>
+              <a href="#" class="inline-flex items-center text-sm font-medium text-gray-900 hover:text-[#7ab848]"
+                >See results <iconify-icon icon="solar:arrow-right-linear" class="ml-1" aria-hidden="true"></iconify-icon
+              ></a>
+            </div>
 
-            <article class="card" role="listitem">
-              <div class="card__icon" aria-hidden="true">
-                <svg class="icon" width="22" height="22" aria-hidden="true"><use href="#i-screw"></use></svg>
+            <!-- Service Card 6 -->
+            <div
+              class="group bg-white p-8 rounded-2xl border border-gray-200 shadow-sm hover:shadow-xl hover:shadow-gray-200/50 hover:border-[#97E45D] transition-all duration-300"
+            >
+              <div
+                class="w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center mb-6 group-hover:bg-[#97E45D] transition-colors duration-300"
+                aria-hidden="true"
+              >
+                <iconify-icon icon="solar:screws-linear" class="text-gray-900" width="24" aria-hidden="true"></iconify-icon>
               </div>
-              <h3 class="card__title">Dental Implants</h3>
-              <p class="card__text">Permanent solutions for missing teeth, restoring both function and aesthetics.</p>
-              <a href="#" class="card__link">View procedure <svg class="icon" width="16" height="16" aria-hidden="true"><use href="#i-arrow-right"></use></svg></a>
-            </article>
+              <h3 class="text-xl font-semibold text-gray-900 mb-3 tracking-tight">Dental Implants</h3>
+              <p class="text-sm text-gray-700 leading-relaxed mb-4">
+                Permanent solutions for missing teeth, restoring both function and aesthetics.
+              </p>
+              <a href="#" class="inline-flex items-center text-sm font-medium text-gray-900 hover:text-[#7ab848]"
+                >View procedure <iconify-icon icon="solar:arrow-right-linear" class="ml-1" aria-hidden="true"></iconify-icon
+              ></a>
+            </div>
           </div>
         </div>
       </section>
 
-      <!-- Membership -->
-      <section id="membership" class="section section--dark">
-        <div class="glow" aria-hidden="true"></div>
-        <div class="container">
-          <div class="dark-grid">
-            <div>
-              <span class="tag">PATIENT MEMBERSHIP</span>
-              <h2 class="dark-title">Affordable dental care via easy monthly installments.</h2>
-              <p class="dark-lead">
-                Join our Practice Plan Membership to spread the cost of your routine dental care and enjoy exclusive benefits.
-              </p>
+      <!-- Membership Dark Section -->
+      <section id="membership" class="py-20 bg-[#0a0a0a] text-white relative overflow-hidden">
+        <div
+          class="absolute top-0 right-0 w-[500px] h-[500px] bg-[#97E45D] rounded-full blur-[120px] opacity-10 pointer-events-none"
+          aria-hidden="true"
+        ></div>
 
-              <ul class="checklist">
-                <li>
-                  <svg class="icon" width="18" height="18" aria-hidden="true" style="color:var(--accent)"><use href="#i-check"></use></svg>
-                  Routine exams and hygiene visits included
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div class="flex flex-col lg:flex-row items-center justify-between gap-12">
+            <div class="lg:w-1/2">
+              <div
+                class="inline-block px-3 py-1 rounded-full border border-[#97E45D]/30 bg-[#97E45D]/10 text-[#97E45D] text-xs font-semibold tracking-wide mb-6"
+              >
+                PATIENT MEMBERSHIP
+              </div>
+              <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mb-6">
+                Affordable dental care via easy monthly installments.
+              </h2>
+              <p class="text-gray-300 text-lg mb-8 max-w-md">
+                Join our Practice Plan Membership to spread the cost of your routine dental care and enjoy exclusive
+                benefits.
+              </p>
+              <ul class="space-y-4 mb-8">
+                <li class="flex items-center gap-3">
+                  <iconify-icon icon="solar:check-circle-linear" class="text-[#97E45D]" width="20" aria-hidden="true"></iconify-icon>
+                  <span class="text-gray-200">Routine exams and hygiene visits included</span>
                 </li>
-                <li>
-                  <svg class="icon" width="18" height="18" aria-hidden="true" style="color:var(--accent)"><use href="#i-check"></use></svg>
-                  Discount on treatments
+                <li class="flex items-center gap-3">
+                  <iconify-icon icon="solar:check-circle-linear" class="text-[#97E45D]" width="20" aria-hidden="true"></iconify-icon>
+                  <span class="text-gray-200">Discount on treatments</span>
                 </li>
-                <li>
-                  <svg class="icon" width="18" height="18" aria-hidden="true" style="color:var(--accent)"><use href="#i-check"></use></svg>
-                  Worldwide accident &amp; emergency insurance
+                <li class="flex items-center gap-3">
+                  <iconify-icon icon="solar:check-circle-linear" class="text-[#97E45D]" width="20" aria-hidden="true"></iconify-icon>
+                  <span class="text-gray-200">Worldwide accident &amp; emergency insurance</span>
                 </li>
               </ul>
-
-              <div style="margin-top:18px;">
-                <a class="btn btn--primary btn-lg" href="#">View Membership Plans</a>
-              </div>
+              <a
+                href="#"
+                class="inline-flex items-center justify-center px-6 py-3 text-base font-semibold text-black transition-all duration-200 bg-[#97E45D] rounded-lg hover:bg-white hover:text-black"
+              >
+                View Membership Plans
+              </a>
             </div>
 
-            <div>
-              <div class="price-card">
-                <span class="badge">RECOMMENDED</span>
-                <h3>Full Care Plan</h3>
-                <div class="price">
-                  <strong>£18.50</strong>
-                  <span>/ month</span>
+            <div class="lg:w-5/12">
+              <div class="relative bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-8">
+                <div class="absolute -top-4 -right-4 bg-[#97E45D] text-black text-xs font-bold px-3 py-1 rounded-full">
+                  RECOMMENDED
                 </div>
-                <div class="rule" aria-hidden="true"></div>
-                <p>Perfect for maintaining optimal oral health with regular professional care.</p>
-                <button type="button">Compare Plans</button>
+                <h3 class="text-xl font-semibold mb-2">Full Care Plan</h3>
+                <div class="flex items-baseline gap-1 mb-6">
+                  <span class="text-3xl font-bold text-white">£18.50</span>
+                  <span class="text-gray-300">/ month</span>
+                </div>
+                <div class="h-px w-full bg-white/15 mb-6"></div>
+                <p class="text-sm text-gray-200 mb-6">
+                  Perfect for maintaining optimal oral health with regular professional care.
+                </p>
+                <button
+                  type="button"
+                  class="w-full py-2.5 rounded-lg border border-white/30 hover:bg-white hover:text-black transition-all duration-200 font-medium text-sm"
+                >
+                  Compare Plans
+                </button>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- Testimonial -->
-      <section class="section" aria-label="Patient testimonial">
-        <div class="container">
-          <div class="two-col">
-            <div class="img-grid" aria-hidden="true">
-              <img src="assets/patient.avif" alt="" width="600" height="640" loading="lazy" decoding="async" />
-              <img src="assets/dentist.avif" alt="" class="shift" width="600" height="640" loading="lazy" decoding="async" />
+      <!-- Testimonial / Social Proof -->
+      <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div class="relative">
+              <div class="grid grid-cols-2 gap-4">
+                <img
+                  src="assets/patient.avif"
+                  class="rounded-2xl object-cover h-64 w-full"
+                  alt="Happy patient"
+                  width="600"
+                  height="640"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <img
+                  src="assets/dentist.avif"
+                  class="rounded-2xl object-cover h-64 w-full translate-y-8"
+                  alt="Dentist at work"
+                  width="600"
+                  height="640"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
             </div>
 
             <div>
-              <div class="quote" aria-hidden="true">“</div>
+              <iconify-icon icon="solar:quote-up-linear" class="text-[#97E45D] mb-6" width="48" aria-hidden="true"></iconify-icon>
 
-              <h2 class="testimonial-title">
-                "I have been a patient at Crescent Dental for years. The consistent, compassionate care from the experienced team makes every visit stress-free."
-              </h2>
+              <h3 class="text-2xl font-bold tracking-tight text-gray-900 mb-6">
+                "I have been a patient at Crescent Dental for years. The consistent, compassionate care from the
+                experienced team makes every visit stress-free."
+              </h3>
 
-              <div class="meta">
+              <div class="flex items-center gap-4">
                 <div>
-                  <strong>Sarah Jenkins</strong>
-                  <small>Patient since 2018</small>
+                  <p class="font-semibold text-gray-900">Sarah Jenkins</p>
+                  <p class="text-sm text-gray-700">Patient since 2018</p>
                 </div>
 
-                <div class="divider" aria-hidden="true"></div>
+                <div class="h-8 w-px bg-gray-200" aria-hidden="true"></div>
 
-                <div class="stars" aria-hidden="true" title="5 out of 5">
-                  <svg class="icon" width="18" height="18" aria-hidden="true"><use href="#i-star"></use></svg>
-                  <svg class="icon" width="18" height="18" aria-hidden="true"><use href="#i-star"></use></svg>
-                  <svg class="icon" width="18" height="18" aria-hidden="true"><use href="#i-star"></use></svg>
-                  <svg class="icon" width="18" height="18" aria-hidden="true"><use href="#i-star"></use></svg>
-                  <svg class="icon" width="18" height="18" aria-hidden="true"><use href="#i-star"></use></svg>
+                <div class="flex text-[#97E45D]" aria-hidden="true">
+                  <iconify-icon icon="solar:star-bold" width="18" aria-hidden="true"></iconify-icon>
+                  <iconify-icon icon="solar:star-bold" width="18" aria-hidden="true"></iconify-icon>
+                  <iconify-icon icon="solar:star-bold" width="18" aria-hidden="true"></iconify-icon>
+                  <iconify-icon icon="solar:star-bold" width="18" aria-hidden="true"></iconify-icon>
+                  <iconify-icon icon="solar:star-bold" width="18" aria-hidden="true"></iconify-icon>
                 </div>
                 <span class="sr-only">Rated 5 out of 5</span>
               </div>
 
-              <a class="reviews-link" href="#">
-                Read more reviews on Google
-                <svg class="icon" width="16" height="16" aria-hidden="true"><use href="#i-arrow-up-right"></use></svg>
-              </a>
+              <div class="mt-8">
+                <a
+                  href="#"
+                  class="text-sm font-semibold text-[color:var(--accent-text)] hover:text-black transition-colors flex items-center gap-1"
+                >
+                  Read more reviews on Google
+                  <iconify-icon icon="solar:arrow-right-up-linear" aria-hidden="true"></iconify-icon>
+                </a>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       <!-- Contact & Location -->
-      <section id="contact" class="section section--muted">
-        <div class="container">
-          <div class="contact-wrap">
-            <div class="contact-grid">
-              <div class="pad">
-                <h2 class="contact-title">Get in Touch</h2>
-                <p class="contact-sub">Fill out the form below or call us to book your consultation.</p>
+      <section id="contact" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100">
+            <div class="grid grid-cols-1 lg:grid-cols-2">
+              <div class="p-8 lg:p-12">
+                <h2 class="text-3xl font-bold tracking-tight text-gray-900 mb-2">Get in Touch</h2>
+                <p class="text-gray-700 mb-8">Fill out the form below or call us to book your consultation.</p>
 
                 <form class="space-y-6" method="post" action="#" accept-charset="UTF-8">
-                  <div class="field-grid">
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>
-                      <label for="name">Full Name</label>
+                      <label for="name" class="block text-sm font-medium text-gray-800 mb-2">Full Name</label>
                       <input
                         type="text"
                         id="name"
                         name="name"
                         autocomplete="name"
+                        class="block w-full rounded-lg border-gray-300 bg-gray-50 focus:border-[#97E45D] focus:ring-[#97E45D] sm:text-sm py-3 px-4 outline-none transition-all"
                         placeholder="Jane Doe"
                         required
                       />
                     </div>
                     <div>
-                      <label for="phone">Phone Number</label>
+                      <label for="phone" class="block text-sm font-medium text-gray-800 mb-2">Phone Number</label>
                       <input
                         type="tel"
                         id="phone"
                         name="phone"
                         autocomplete="tel"
                         inputmode="tel"
+                        class="block w-full rounded-lg border-gray-300 bg-gray-50 focus:border-[#97E45D] focus:ring-[#97E45D] sm:text-sm py-3 px-4 outline-none transition-all"
                         placeholder="07700 900000"
                         required
                       />
                     </div>
                   </div>
 
-                  <div style="margin-top:14px;">
-                    <label for="email">Email Address</label>
+                  <div>
+                    <label for="email" class="block text-sm font-medium text-gray-800 mb-2">Email Address</label>
                     <input
                       type="email"
                       id="email"
@@ -1422,87 +682,109 @@
                       inputmode="email"
                       autocapitalize="none"
                       spellcheck="false"
+                      class="block w-full rounded-lg border-gray-300 bg-gray-50 focus:border-[#97E45D] focus:ring-[#97E45D] sm:text-sm py-3 px-4 outline-none transition-all"
                       placeholder="jane@example.com"
                       required
                     />
                   </div>
 
                   <fieldset>
-                    <legend>Service Interest</legend>
-                    <div class="checks">
-                      <label class="check-label">
+                    <legend class="block text-sm font-medium text-gray-800 mb-3">Service Interest</legend>
+                    <div class="flex flex-wrap gap-4">
+                      <label class="inline-flex items-center cursor-pointer">
                         <input type="checkbox" class="custom-checkbox" name="interest[]" value="Check-up" />
-                        <span>Check-up</span>
+                        <span class="ml-2 text-sm text-gray-700">Check-up</span>
                       </label>
-                      <label class="check-label">
+                      <label class="inline-flex items-center cursor-pointer">
                         <input type="checkbox" class="custom-checkbox" name="interest[]" value="Whitening" />
-                        <span>Whitening</span>
+                        <span class="ml-2 text-sm text-gray-700">Whitening</span>
                       </label>
-                      <label class="check-label">
+                      <label class="inline-flex items-center cursor-pointer">
                         <input type="checkbox" class="custom-checkbox" name="interest[]" value="Emergency" />
-                        <span>Emergency</span>
+                        <span class="ml-2 text-sm text-gray-700">Emergency</span>
                       </label>
-                      <label class="check-label">
+                      <label class="inline-flex items-center cursor-pointer">
                         <input type="checkbox" class="custom-checkbox" name="interest[]" value="Other" />
-                        <span>Other</span>
+                        <span class="ml-2 text-sm text-gray-700">Other</span>
                       </label>
                     </div>
                   </fieldset>
 
-                  <button type="submit" class="submit">Send Message</button>
+                  <button
+                    type="submit"
+                    class="w-full inline-flex items-center justify-center px-6 py-3 text-base font-semibold text-black transition-all duration-200 bg-[#97E45D] rounded-lg hover:shadow-lg hover:brightness-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#97E45D]"
+                  >
+                    Send Message
+                  </button>
                 </form>
               </div>
 
-              <!-- Map: no third-party iframe until the user clicks "Load map" -->
-              <div class="map" aria-label="Location map">
-                <div class="map__preview" data-map-preview>
+              <!-- MAP: preview + click-to-load (prevents Lighthouse 3rd-party issues, still “works”) -->
+              <div class="bg-gray-100 relative min-h-[400px]">
+                <div id="map-host" class="absolute inset-0 bg-gray-300">
+                  <!-- Static preview (no third-party load) -->
                   <img
                     src="assets/map-preview.avif"
-                    alt="Map preview for Crescent Dental Clinic location"
+                    alt="Map preview of Crescent Dental Clinic location"
+                    class="w-full h-full object-cover"
                     width="1200"
                     height="900"
                     loading="lazy"
                     decoding="async"
                   />
-                  <div class="map__overlay" aria-hidden="true"></div>
+
+                  <!-- Overlay controls -->
+                  <div class="absolute inset-0 bg-black/10 pointer-events-none" aria-hidden="true"></div>
+
+                  <div class="absolute top-4 left-4 right-4 flex flex-col sm:flex-row gap-3">
+                    <button
+                      id="map-load"
+                      type="button"
+                      class="pointer-events-auto inline-flex items-center justify-center px-4 py-2 text-sm font-semibold text-black bg-white/90 backdrop-blur-md rounded-lg border border-white/50 hover:bg-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#97E45D]"
+                      aria-label="Load interactive Google map"
+                    >
+                      Load interactive map
+                    </button>
+
+                    <a
+                      class="pointer-events-auto inline-flex items-center justify-center px-4 py-2 text-sm font-semibold text-black bg-[#97E45D] rounded-lg hover:bg-[#86cf50] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#97E45D]"
+                      href="https://www.google.com/maps/search/?api=1&query=12%20Cambridge%20Crescent%2C%20Harrogate%20HG1%201PE"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Open in Google Maps
+                    </a>
+                  </div>
+
+                  <noscript>
+                    <a
+                      class="absolute top-4 left-4 inline-flex items-center justify-center px-4 py-2 text-sm font-semibold text-black bg-[#97E45D] rounded-lg"
+                      href="https://www.google.com/maps/search/?api=1&query=12%20Cambridge%20Crescent%2C%20Harrogate%20HG1%201PE"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Open in Google Maps
+                    </a>
+                  </noscript>
                 </div>
 
-                <div class="map__cta">
-                  <button type="button" class="pill-btn" data-load-map>
-                    Load interactive map
-                  </button>
-                  <a
-                    class="pill-btn"
-                    href="https://www.google.com/maps?q=12%20Cambridge%20Crescent%2C%20Harrogate%20HG1%201PE%2C%20UK"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Open in Google Maps
-                  </a>
-                </div>
-
-                <div class="map__frame" data-map-frame aria-hidden="true"></div>
-
-                <div class="visit">
-                  <h3>Visit Us</h3>
-                  <p style="display:flex; gap:10px; align-items:flex-start; margin-bottom:10px;">
-                    <span aria-hidden="true" style="color:#6b7280; margin-top:2px;">
-                      <svg class="icon" width="18" height="18"><use href="#i-pin"></use></svg>
-                    </span>
-                    <span>
+                <div class="absolute bottom-6 left-6 right-6 bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+                  <h4 class="font-bold text-gray-900 mb-2">Visit Us</h4>
+                  <div class="flex items-start gap-3 mb-3">
+                    <iconify-icon icon="solar:map-point-linear" class="text-gray-500 mt-1" width="18" aria-hidden="true"></iconify-icon>
+                    <p class="text-sm text-gray-700">
                       12 Cambridge Crescent,<br />
                       Harrogate, HG1 1PE
-                    </span>
-                  </p>
-                  <p style="display:flex; gap:10px; align-items:center;">
-                    <span aria-hidden="true" style="color:#6b7280;">
-                      <svg class="icon" width="18" height="18"><use href="#i-phone"></use></svg>
-                    </span>
-                    <a href="tel:01423531863">01423 531863</a>
-                  </p>
+                    </p>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <iconify-icon icon="solar:phone-linear" class="text-gray-500" width="18" aria-hidden="true"></iconify-icon>
+                    <a href="tel:01423531863" class="text-sm font-medium text-gray-900 hover:text-[#7ab848]"
+                      >01423 531863</a
+                    >
+                  </div>
                 </div>
               </div>
-              <!-- /Map -->
             </div>
           </div>
         </div>
@@ -1510,114 +792,85 @@
     </main>
 
     <!-- Footer -->
-    <footer class="footer">
-      <div class="container">
-        <h2 class="sr-only">Site footer</h2>
-
-        <div class="footer-grid">
-          <div>
-            <div class="footer-brand">
-              <span class="footer-mark" aria-hidden="true">
-                <svg class="icon" width="14" height="14" aria-hidden="true"><use href="#i-medkit"></use></svg>
-              </span>
-              Crescent Dental
+    <footer class="bg-[#0a0a0a] text-gray-300 py-12 border-t border-white/10">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+          <div class="col-span-1 md:col-span-1">
+            <div class="flex items-center gap-2 mb-4">
+              <div class="w-6 h-6 bg-[#97E45D] rounded flex items-center justify-center text-black" aria-hidden="true">
+                <iconify-icon icon="solar:medical-kit-linear" width="14" aria-hidden="true"></iconify-icon>
+              </div>
+              <span class="text-white font-bold tracking-tight">Crescent Dental</span>
             </div>
-            <p style="margin:0; font-size:13px; line-height:1.7;">
-              Family private dental practice in Harrogate providing comprehensive cosmetic and general dentistry since 1993.
+            <p class="text-sm leading-relaxed mb-6">
+              Family private dental practice in Harrogate providing comprehensive cosmetic and general dentistry since
+              1993.
             </p>
           </div>
 
           <div>
-            <h3>Quick Links</h3>
-            <ul>
-              <li><a href="#top">Home</a></li>
-              <li><a href="#">About Us</a></li>
-              <li><a href="#team">Meet the Team</a></li>
-              <li><a href="#fees">Fee Guide</a></li>
+            <h4 class="text-white font-semibold mb-4">Quick Links</h4>
+            <ul class="space-y-2 text-sm">
+              <li><a href="#top" class="hover:text-[#97E45D] transition-colors">Home</a></li>
+              <li><a href="#" class="hover:text-[#97E45D] transition-colors">About Us</a></li>
+              <li><a href="#team" class="hover:text-[#97E45D] transition-colors">Meet the Team</a></li>
+              <li><a href="#fees" class="hover:text-[#97E45D] transition-colors">Fee Guide</a></li>
             </ul>
           </div>
 
           <div>
-            <h3>Services</h3>
-            <ul>
-              <li><a href="#services">Cosmetic Dentistry</a></li>
-              <li><a href="#services">Dental Implants</a></li>
-              <li><a href="#services">Teeth Whitening</a></li>
-              <li><a href="#services">Emergency Care</a></li>
+            <h4 class="text-white font-semibold mb-4">Services</h4>
+            <ul class="space-y-2 text-sm">
+              <li><a href="#services" class="hover:text-[#97E45D] transition-colors">Cosmetic Dentistry</a></li>
+              <li><a href="#services" class="hover:text-[#97E45D] transition-colors">Dental Implants</a></li>
+              <li><a href="#services" class="hover:text-[#97E45D] transition-colors">Teeth Whitening</a></li>
+              <li><a href="#services" class="hover:text-[#97E45D] transition-colors">Emergency Care</a></li>
             </ul>
           </div>
 
           <div>
-            <h3>Connect</h3>
-            <div class="social" aria-label="Social links">
-              <a href="#" aria-label="Facebook">
-                <svg class="icon" width="22" height="22" aria-hidden="true"><use href="#i-facebook"></use></svg>
+            <h4 class="text-white font-semibold mb-4">Connect</h4>
+            <div class="flex gap-4 mb-4" aria-label="Social links">
+              <a href="#" class="text-gray-300 hover:text-white transition-colors" aria-label="Facebook">
+                <iconify-icon icon="solar:facebook-linear" width="24" aria-hidden="true"></iconify-icon>
               </a>
-              <a href="#" aria-label="Instagram">
-                <svg class="icon" width="22" height="22" aria-hidden="true"><use href="#i-instagram"></use></svg>
+              <a href="#" class="text-gray-300 hover:text-white transition-colors" aria-label="Instagram">
+                <iconify-icon icon="solar:instagram-linear" width="24" aria-hidden="true"></iconify-icon>
               </a>
             </div>
-            <p style="margin:0; font-size:12px; line-height:1.6;">
+            <p class="text-xs">
               Emergency? Call us immediately.<br />
-              <span style="color:#fff; font-weight:950;">01423 531863</span>
+              <span class="text-white font-medium">01423 531863</span>
             </p>
           </div>
         </div>
 
-        <div class="footer-bottom">
-          <p style="margin:0;">© 2026 Crescent Dental Clinic. All rights reserved.</p>
-          <div class="links">
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms of Service</a>
+        <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs">
+          <p>&copy; 2026 Crescent Dental Clinic. All rights reserved.</p>
+          <div class="flex gap-6">
+            <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+            <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
           </div>
         </div>
       </div>
     </footer>
 
-    <!-- =========================================================
-      Minimal JS (no 3rd-party): mobile nav + click-to-load map
-      - Lighthouse won’t click the map button, so no 3P cookies on load.
-    ========================================================== -->
+    <!-- Click-to-load map embed (only runs if button exists) -->
     <script>
       (function () {
-        // Mobile menu toggle
-        var toggle = document.querySelector("[data-nav-toggle]");
-        var mobile = document.getElementById("mobile-menu");
-        if (toggle && mobile) {
-          toggle.addEventListener("click", function () {
-            var expanded = toggle.getAttribute("aria-expanded") === "true";
-            toggle.setAttribute("aria-expanded", String(!expanded));
-            mobile.style.display = expanded ? "none" : "block";
-          });
-        }
+        const btn = document.getElementById("map-load");
+        const host = document.getElementById("map-host");
+        if (!btn || !host) return;
 
-        // Click-to-load Google Maps iframe (prevents 3P cookies during Lighthouse load)
-        var loadBtn = document.querySelector("[data-load-map]");
-        var frame = document.querySelector("[data-map-frame]");
-        var preview = document.querySelector("[data-map-preview]");
-        if (loadBtn && frame) {
-          loadBtn.addEventListener("click", function () {
-            // Avoid double-inserting
-            if (frame.dataset.loaded === "true") return;
-            frame.dataset.loaded = "true";
+        btn.addEventListener("click", function () {
+          const src =
+            "https://www.google.com/maps?q=12%20Cambridge%20Crescent%2C%20Harrogate%20HG1%201PE&output=embed";
 
-            var iframe = document.createElement("iframe");
-            iframe.src =
-              "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2346.777934448532!2d-1.5435986841366914!3d53.99166998011933!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487953ea6a4225d3%3A0x6b8f3e0988012678!2s12%20Cambridge%20Cres%2C%20Harrogate%20HG1%201PE%2C%20UK!5e0!3m2!1sen!2suk!4v1677685628532!5m2!1sen!2suk";
-            iframe.loading = "lazy";
-            iframe.referrerPolicy = "no-referrer-when-downgrade";
-            iframe.title = "Map showing Crescent Dental Clinic location";
-            iframe.allowFullscreen = true;
-
-            if (preview) preview.style.display = "none";
-            frame.style.display = "block";
-            frame.removeAttribute("aria-hidden");
-            frame.appendChild(iframe);
-
-            loadBtn.disabled = true;
-            loadBtn.textContent = "Map loaded";
-          });
-        }
+          host.innerHTML =
+            '<iframe class="map-iframe" src="' +
+            src +
+            '" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Map showing Crescent Dental Clinic location"></iframe>';
+        });
       })();
     </script>
   </body>
